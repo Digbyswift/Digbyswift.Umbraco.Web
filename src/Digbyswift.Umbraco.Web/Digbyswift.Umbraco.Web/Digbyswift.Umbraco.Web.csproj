@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Digbyswift.Umbraco.Web</RootNamespace>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Digbyswift.Umbraco.Web</Title>
+        <Authors>Digbyswift Ltd</Authors>
+        <Copyright>Copyright © Digbyswift Ltd</Copyright>
+        <PackageProjectUrl>https://www.nuget.org/packages/Digbyswift.Umbraco.Web</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/digbyswift/Digbyswift.Umbraco.Web/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageIcon>package-icon.png</PackageIcon>
+        <PackageIconUrl>package-icon.png</PackageIconUrl>
+        <RepositoryUrl>https://www.nuget.org/packages/Digbyswift.Umbraco.Web</RepositoryUrl>
+        <PackageTags>c# umbraco</PackageTags>
+        <PackageVersion>10.0.0</PackageVersion>
+        <AssemblyVersion>10.0.0</AssemblyVersion>
+        <FileVersion>10.0.0</FileVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.0" />
+      <PackageReference Include="Umbraco.Cms.Web.Common" Version="10.1.1" />
+      <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\..\..\package-icon.png" Pack="true" PackagePath="" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="..\..\..\LICENSE" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+</Project>
