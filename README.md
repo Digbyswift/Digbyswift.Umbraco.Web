@@ -47,50 +47,59 @@ services.AddControllerDependencies();
 
 A set of basic but useful extensions for making life just a little easier. These include:
 
- - BlockListItemExtensions
-     - `TypeAlias()`
-     - `Is(string alias)`
- - IContentExtensions
-     - `GetDirtyProperties(content)`
-     - `SetValueAsDocumentUdi(string alias, Guid contentKey)`
-     - `SetValueAsMediaUdi(string alias, Guid contentKey)`
-     - `SetValueAsMemberUdi(string alias, Guid contentKey)`
-     - `SetValueAsElementUdi(string alias, Guid contentKey)`
- - IContentServiceExtensions
-     - `GetAllChildren(int parentId)`
-     - `GetAllOfType(int contentTypeId)`
- - GuidExtensions
-     - `ToUdi(string entityType = uConstants.UdiEntityType.Document)`
- - HttpRequestExtensions
-     - `IsPreviewPath()`
-     - `IsReservedPath()`
-     - `IsMediaPath()`
- - LinkExtensions
-     - `TargetAsAttribute()`
- - IMemberExtensions
-     - `GetDirtyProperties()`
-     - `ToIdentityUser(string memberTypeAlias, bool isApproved = true)`
- - PublishedContentExtensions
-     - `TypeAlias()`
-     - `Is(string alias)`
-     - `IsAny(params string[] alias)`
-     - `HasTemplate()`
-     - `HasAncestor(string docTypeAlias)`
-     - `FirstSibling(content)`
-     - `FirstSibling(string alias)`
-     - `FirstSibling<T>(content)`
-     - `PreviousSibling(content)`
-     - `PreviousSibling(string alias)`
-     - `PreviousSibling<T>(Func<T, bool>? filter = null)`
-     - `LastSibling(content)`
-     - `LastSibling(string alias)`
-     - `LastSibling<T>(content)`
-     - `NextSibling(Func<IPublishedbool>? filter = null)`
-     - `NextSibling(string alias)`
-     - `NextSibling<T>(Func<T, bool>? filter = null)`
- - PublishedElementExtensions
-     - `TypeAlias()`
-     - `Is(string alias)`
-     - `IsAny(params string[] alias)`
- - UdiExtensions
-     - `ToGuid()`
+### BlockListItemExtensions
+  - `TypeAlias()`
+  - `Is(string alias)`
+
+### IContentExtensions
+  - `GetDirtyProperties(content)`
+  - `SetValueAsDocumentUdi(string alias, Guid contentKey)`
+  - `SetValueAsMediaUdi(string alias, Guid contentKey)`
+  - `SetValueAsMemberUdi(string alias, Guid contentKey)`
+  - `SetValueAsElementUdi(string alias, Guid contentKey)`
+
+### IContentServiceExtensions
+  - `GetAllChildren(int parentId)`
+  - `GetAllOfType(int contentTypeId)`
+
+### GuidExtensions
+  - `ToUdi(string entityType = uConstants.UdiEntityType.Document)`
+
+### HttpRequestExtensions
+  - `IsPreviewPath()`
+  - `IsReservedPath()`
+  - `IsMediaPath()`
+
+### LinkExtensions
+  - `TargetAsAttribute()`
+
+### IMemberExtensions
+  - `GetDirtyProperties()`
+  - `ToIdentityUser(string memberTypeAlias, bool isApproved = true)`
+
+ ### PublishedContentExtensions
+  - `TypeAlias()`
+  - `Is(string alias)`
+  - `IsAny(params string[] alias)`
+  - `HasTemplate()`
+  - `HasAncestor(string docTypeAlias)`
+  - `FirstSibling(content)`
+  - `FirstSibling(string alias)`
+  - `FirstSibling<T>(content)`
+  - `PreviousSibling(content)`
+  - `PreviousSibling(string alias)`
+  - `PreviousSibling<T>(Func<T, bool>? filter = null)`
+  - `LastSibling(content)`
+  - `LastSibling(string alias)`
+  - `LastSibling<T>(content)`
+  - `NextSibling(Func<IPublishedbool>? filter = null)`
+  - `NextSibling(string alias)`
+  - `NextSibling<T>(Func<T, bool>? filter = null)`
+
+### PublishedElementExtensions
+ - `TypeAlias()`
+ - `Is(string alias)`
+ - `IsAny(params string[] alias)`
+
+### UdiExtensions
+ - `ToGuid()`
