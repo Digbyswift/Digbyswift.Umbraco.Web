@@ -20,6 +20,7 @@
         <AssemblyVersion>10.1.0</AssemblyVersion>
         <FileVersion>10.1.0</FileVersion>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
     <ItemGroup>
       <PackageReference Include="Digbyswift.Core" Version="2.1.0" />
