@@ -6,13 +6,13 @@ namespace Digbyswift.Umbraco.Web.Extensions
 {
     public static class HttpRequestExtensions
     {
-        private static readonly Lazy<Regex> PreviewPathRegex = new(() => new Regex(@".*\/(?<id>[\d]{4,})(\.aspx|\/?)"));
-        
+        private static readonly Lazy<Regex> PreviewPathRegex = new(() => new Regex(@"^\/(?<id>[\d]{4,})(\/?)$"));
+
         public static bool IsPreviewPath(this HttpRequest request)
         {
             return PreviewPathRegex.Value.IsMatch(request.Path);
         }
-        
+
         public static int? GetPreviewId(this HttpRequest request)
         {
             var match = PreviewPathRegex.Value.Match(request.Path);
@@ -33,10 +33,15 @@ namespace Digbyswift.Umbraco.Web.Extensions
         /// </summary>
         public static bool IsReservedPath(this HttpRequest request)
         {
-            if (request.Path.Value == null || request.Path.Value == StringConstants.ForwardSlash)
+            if (request.Path.Value is null or StringConstants.ForwardSlash)
                 return true;
-            
-            return Constants.UmbracoReservedPaths.Any(x => request.Path.StartsWithSegments(x));
+
+            foreach (var x in Constants.UmbracoReservedPaths)
+            {
+                if (request.Path.StartsWithSegments(x)) return true;
+            }
+
+            return false;
         }
 
         public static bool IsMediaPath(this HttpRequest request)
