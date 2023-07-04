@@ -1,5 +1,8 @@
 # Digbyswift.Umbraco.Web
 
+[![NuGet version (Digbyswift.Umbraco.Web)](https://img.shields.io/nuget/v/Digbyswift.Umbraco.Web.svg)](https://www.nuget.org/packages/Digbyswift.Umbraco.Web/)
+![Build status](https://dev.azure.com/digbyswift/Digbyswift%20-%20OSS%20Packages/_apis/build/status/Build%20Digbyswift.Umbraco.Web)
+
 A nullable-enabled library of useful classes and extensions for supporting an Umbraco v10+ project.
 
 ## Controllers
@@ -66,6 +69,8 @@ A set of basic but useful extensions for making life just a little easier. These
   - `ToUdi(string entityType = uConstants.UdiEntityType.Document)`
 
 ### HttpRequestExtensions
+  - `GetPreviewId()`
+  - `TryGetPreviewId()`
   - `IsPreviewPath()`
   - `IsReservedPath()`
   - `IsMediaPath()`
