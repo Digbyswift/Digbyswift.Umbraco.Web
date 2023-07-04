@@ -1,6 +1,6 @@
 # Digbyswift.Umbraco.Web
 
-A nullable-enabled library of useful classes and extensions for supporting an Umbraco v10 project.
+A nullable-enabled library of useful classes and extensions for supporting an Umbraco v10+ project.
 
 ## Controllers
 
