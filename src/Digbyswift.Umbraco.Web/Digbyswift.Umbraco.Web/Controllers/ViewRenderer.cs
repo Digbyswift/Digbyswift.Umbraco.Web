@@ -4,60 +4,59 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace Digbyswift.Umbraco.Web.Controllers
+namespace Digbyswift.Umbraco.Web.Controllers;
+
+public class ViewRenderer : IViewRenderer
 {
-    public class ViewRenderer : IViewRenderer
+    private readonly IRazorViewEngine _viewEngine;
+
+    public ViewRenderer(IRazorViewEngine viewEngine) => _viewEngine = viewEngine;
+
+    public async Task<string> RenderAsStringAsync<TModel>(Controller controller, string viewName, TModel model)
     {
-        private readonly IRazorViewEngine _viewEngine;
+        var viewEngineResult = _viewEngine.FindView(controller.ControllerContext, viewName, false);
+        if (!viewEngineResult.Success)
+            throw new InvalidOperationException($"Could not find view: {viewName}");
 
-        public ViewRenderer(IRazorViewEngine viewEngine) => _viewEngine = viewEngine;
+        var view = viewEngineResult.View;
+        controller.ViewData.Model = model;
 
-        public async Task<string> RenderAsStringAsync<TModel>(Controller controller, string viewName, TModel model)
-        {
-            var viewEngineResult = _viewEngine.FindView(controller.ControllerContext, viewName, false);
-            if (!viewEngineResult.Success)
-                throw new InvalidOperationException($"Could not find view: {viewName}");
+        await using var writer = new StringWriter();
+        var viewContext = new ViewContext(
+            controller.ControllerContext,
+            view,
+            controller.ViewData,
+            controller.TempData,
+            writer,
+            new HtmlHelperOptions());
 
-            var view = viewEngineResult.View;
-            controller.ViewData.Model = model;
+        await view.RenderAsync(viewContext);
 
-            await using var writer = new StringWriter();
-            var viewContext = new ViewContext(
-                controller.ControllerContext,
-                view,
-                controller.ViewData,
-                controller.TempData,
-                writer,
-                new HtmlHelperOptions());
+        return new HtmlString(writer.ToString()).Value ?? String.Empty;
+    }
 
-            await view.RenderAsync(viewContext);
+    public async Task<string> RenderAsStringAsync<TModel>(ViewComponent component, string viewName, TModel model)
+    {
+        var viewEngineResult = _viewEngine.FindView(component.ViewContext, viewName, false);
+        if (!viewEngineResult.Success)
+            throw new InvalidOperationException($"Could not find view: {viewName}");
 
-            return new HtmlString(writer.ToString()).Value ?? String.Empty;
-        }
+        var view = viewEngineResult.View;
+        component.ViewData.Model = model;
 
-        public async Task<string> RenderAsStringAsync<TModel>(ViewComponent component, string viewName, TModel model)
-        {
-            var viewEngineResult = _viewEngine.FindView(component.ViewContext, viewName, false);
-            if (!viewEngineResult.Success)
-                throw new InvalidOperationException($"Could not find view: {viewName}");
+        await using var writer = new StringWriter();
+        var viewContext = new ViewContext(
+            component.ViewContext,
+            view,
+            component.ViewData,
+            component.TempData,
+            writer,
+            new HtmlHelperOptions());
 
-            var view = viewEngineResult.View;
-            component.ViewData.Model = model;
+        await view.RenderAsync(viewContext);
 
-            await using var writer = new StringWriter();
-            var viewContext = new ViewContext(
-                component.ViewContext,
-                view,
-                component.ViewData,
-                component.TempData,
-                writer,
-                new HtmlHelperOptions());
-
-            await view.RenderAsync(viewContext);
-
-            var output = writer.ToString();
+        var output = writer.ToString();
             
-            return new HtmlString(output).Value ?? String.Empty;
-        }
+        return new HtmlString(output).Value ?? String.Empty;
     }
 }
