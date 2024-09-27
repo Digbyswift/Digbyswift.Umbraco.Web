@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Digbyswift.Umbraco.Web</RootNamespace>
@@ -24,9 +24,10 @@
     </PropertyGroup>
     <ItemGroup>
       <PackageReference Include="Digbyswift.Core" Version="2.1.0" />
-      <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.0" />
-      <PackageReference Include="Umbraco.Cms.Web.Common" Version="10.1.1" />
-      <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.1.1" />
+      <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+      <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
+      <PackageReference Include="Umbraco.Cms.Web.Common" Version="12.3.10" />
+      <PackageReference Include="Umbraco.Cms.Web.Website" Version="12.3.10" />
     </ItemGroup>
     <ItemGroup>
       <None Include="..\..\..\package-icon.png" Pack="true" PackagePath="" />
