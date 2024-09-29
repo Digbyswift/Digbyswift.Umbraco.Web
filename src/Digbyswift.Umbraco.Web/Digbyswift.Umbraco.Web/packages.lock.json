@@ -113,13 +113,13 @@
       },
       "Umbraco.StorageProviders.AzureBlob.ImageSharp": {
         "type": "Direct",
-        "requested": "[12.0.1, )",
-        "resolved": "12.0.1",
-        "contentHash": "2WrjIbEgZRxMRQaBQw/3wbrspoMleeWA9NSQsQ6p8EFdPfK24cJPwginytHuUkZknzNN7ONcUgkdV8x+taR3Cw==",
+        "requested": "[13.0.1, )",
+        "resolved": "13.0.1",
+        "contentHash": "j9ukL9Uo3I9zTMiWHX3cVaDO7YHM8Bc4cLdcere5bnd5pj/DY5HNOVDHloXMrPhA7cCibZO7oYiBX8+5SprRHw==",
         "dependencies": {
-          "SixLabors.ImageSharp.Web.Providers.Azure": "3.0.1",
-          "Umbraco.Cms.Imaging.ImageSharp": "[12.0.0, 13.0.0)",
-          "Umbraco.StorageProviders.AzureBlob": "[12.0.1, 13.0.0)"
+          "SixLabors.ImageSharp.Web.Providers.Azure": "3.1.0",
+          "Umbraco.Cms.Imaging.ImageSharp": "[13.0.0, 14.0.0)",
+          "Umbraco.StorageProviders.AzureBlob": "[13.0.1, 14.0.0)"
         }
       },
       "Asp.Versioning.Abstractions": {
@@ -1282,11 +1282,11 @@
       },
       "SixLabors.ImageSharp.Web.Providers.Azure": {
         "type": "Transitive",
-        "resolved": "3.0.1",
-        "contentHash": "TLxPYTqqq2LZoQEgks8e2ZrnXFy26uw8R6rFp4Iw8A9C6eKIQ0ECFcKUNYVZPTssqfFlHUHr6KkW4hXa9x9w3g==",
+        "resolved": "3.1.0",
+        "contentHash": "lFI5/Q0O/kQ/mQHdRtuoP5R+HkGadpH1AzK2OKndWqfsCXezjXmWV9or3F2AdoK0nllkCVAjHBuleWlhc2zhHQ==",
         "dependencies": {
           "Azure.Storage.Blobs": "12.15.1",
-          "SixLabors.ImageSharp.Web": "3.0.1"
+          "SixLabors.ImageSharp.Web": "3.1.0"
         }
       },
       "Smidge": {
@@ -2274,12 +2274,12 @@
       },
       "Umbraco.Cms.Imaging.ImageSharp": {
         "type": "Transitive",
-        "resolved": "12.0.0",
-        "contentHash": "5mtwUi2qj25CkI2Yno6VpghRttJF2n/Y4ycLJNtR/QkF1SyGLXQsjVqY1mXMV0HKH5UzuP+AMTk3YC8ZMivsfw==",
+        "resolved": "13.0.0",
+        "contentHash": "kni5Yj2WkRbLl9Ufn5E++LwkZSre1oJmhwyePao8Dx7EXPFOWqbYrS0dYipHBufb5PlZqzm7rznx7S/bOMIYog==",
         "dependencies": {
-          "SixLabors.ImageSharp": "3.0.1",
-          "SixLabors.ImageSharp.Web": "3.0.1",
-          "Umbraco.Cms.Web.Common": "12.0.0"
+          "SixLabors.ImageSharp": "3.1.0",
+          "SixLabors.ImageSharp.Web": "3.1.0",
+          "Umbraco.Cms.Web.Common": "[13.0.0, 14.0.0)"
         }
       },
       "Umbraco.Cms.Infrastructure": {
