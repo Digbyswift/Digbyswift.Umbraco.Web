@@ -1,4 +1,6 @@
 ﻿using Digbyswift.Umbraco.Web.Controllers;
+using Digbyswift.Umbraco.Web.Settings;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Digbyswift.Umbraco.Web.Startup;

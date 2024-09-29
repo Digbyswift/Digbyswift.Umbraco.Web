@@ -1,4 +1,5 @@
 ﻿using Digbyswift.Umbraco.Web.ImageSharp;
+using Digbyswift.Umbraco.Web.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,34 @@ namespace Digbyswift.Umbraco.Web.Startup;
 
 public static class UmbracoBuilderExtensions
 {
+    public static IUmbracoBuilder AddConnectionStrings(this IUmbracoBuilder builder)
+    {
+        builder.Services.Configure<ConnectionStringSettings>(builder.Config.GetSection(ConnectionStringSettings.SectionName));
+
+        return builder;
+    }
+
+    public static IUmbracoBuilder AddEnvironmentSettings(this IUmbracoBuilder builder)
+    {
+        builder.Services.AddSingleton(new EnvironmentSettings(builder.Config));
+
+        return builder;
+    }
+
+    public static IUmbracoBuilder AddAzureCdnSettings(this IUmbracoBuilder builder)
+    {
+        builder.Services.AddSingleton(new AzureCdnSettings(builder.Config));
+
+        return builder;
+    }
+
+    public static IUmbracoBuilder AddEmailSettings(this IUmbracoBuilder builder)
+    {
+        builder.Services.AddSingleton(new EmailSettings(builder.Config));
+
+        return builder;
+    }
+
     public static IUmbracoBuilder AddDefaultController<T>(this IUmbracoBuilder builder) where T : Controller
     {
         builder.Services.Configure<UmbracoRenderingDefaultsOptions>(c => { c.DefaultControllerType = typeof(T); });
