@@ -4,13 +4,13 @@ namespace Digbyswift.Umbraco.Web.ImageSharp;
 
 public static class ImageSharpOptionsHelper
 {
-    public static Task ParseCommandsAsync(ImageCommandContext context)
+    public static Task ParseCommandsAsync(ImageCommandContext context, int maxWidth, int maxHeight, int minQuality)
     {
         context
             .EnsurePermittedCommands()
-            .EnsureValidWidthCommand()
-            .EnsureValidHeightCommand()
-            .EnsureValidQualityCommand(minQuality: 70)
+            .EnsureValidWidthCommand(maxWidth)
+            .EnsureValidHeightCommand(maxHeight)
+            .EnsureValidQualityCommand(minQuality)
             .EnsureValidFormatCommand();
 
         return Task.CompletedTask;

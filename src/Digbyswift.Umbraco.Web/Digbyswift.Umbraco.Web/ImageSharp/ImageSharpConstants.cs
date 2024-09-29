@@ -16,17 +16,21 @@ public static class ImageSharpConstants
     public const string TiffExtension = ".tiff";
     public const string TifExtension = ".tif";
 
-    public const int MaxImageWidth = 2200;
-    public const int MaxImageHeight = 2200;
+    public const int DefaultMaxWidth = 3000;
+    public const int DefaultMaxHeight = 3000;
+    public const int DefaultMinQuality = 70;
 
-    public static IEnumerable<string> GetSupportedExtensions()
+    public static IEnumerable<string> GetSupportedExtensions
     {
-        yield return JpegExtension;
-        yield return JpgExtension;
-        yield return GifExtension;
-        yield return BmpExtension;
-        yield return PngExtension;
-        yield return TiffExtension;
-        yield return TifExtension;
+        get
+        {
+            yield return JpegExtension;
+            yield return JpgExtension;
+            yield return GifExtension;
+            yield return BmpExtension;
+            yield return PngExtension;
+            yield return TiffExtension;
+            yield return TifExtension;
+        }
     }
 }

@@ -15,31 +15,6 @@ namespace Digbyswift.Umbraco.Web.Startup;
 
 public static class UmbracoBuilderExtensions
 {
-    public static IUmbracoBuilder AddRegistrar(this IUmbracoBuilder builder)
-    {
-        var logger = builder.BuilderLoggerFactory.CreateLogger(nameof(UmbracoBuilderExtensions));
-
-        if (!envSettings.HasSeparateCmsInstance)
-        {
-            builder.SetServerRegistrar<SingleRoleRegistrar>();
-            logger.LogInformation("Registrar: {registrar} #startup", nameof(SingleRoleRegistrar));
-            return builder;
-        }
-
-        if (!envSettings.IsCms())
-        {
-            builder.SetServerRegistrar<SubscriberRoleRegistrar>();
-            logger.LogInformation("Registrar: {registrar} #startup", nameof(SubscriberRoleRegistrar));
-        }
-        else if (envSettings.IsCms() && !envSettings.IsDeployment())
-        {
-            builder.SetServerRegistrar<SchedulingPublisherRoleRegistrar>();
-            logger.LogInformation("Registrar: {registrar} #startup", nameof(SchedulingPublisherRoleRegistrar));
-        }
-
-        return builder;
-    }
-
     public static IUmbracoBuilder AddDefaultController<T>(this IUmbracoBuilder builder) where T : Controller
     {
         builder.Services.Configure<UmbracoRenderingDefaultsOptions>(c => { c.DefaultControllerType = typeof(T); });
@@ -49,7 +24,14 @@ public static class UmbracoBuilderExtensions
 
     public static IUmbracoBuilder AddImageSharpCommandParsing(this IUmbracoBuilder builder)
     {
-        builder.Services.Configure<ImageSharpMiddlewareOptions>(options => { options.OnParseCommandsAsync = ImageSharpOptionsHelper.ParseCommandsAsync; });
+        var maxWidth = builder.Config.GetValue<int?>("Umbraco:CMS:Imaging:Resize:MaxWidth") ?? ImageSharpConstants.DefaultMaxWidth;
+        var maxHeight = builder.Config.GetValue<int?>("Umbraco:CMS:Imaging:Resize:MaxHeight") ?? ImageSharpConstants.DefaultMaxHeight;
+        var minQuality = builder.Config.GetValue<int?>("Umbraco:CMS:Imaging:Resize:MinQuality") ?? ImageSharpConstants.DefaultMinQuality;
+
+        builder.Services.Configure<ImageSharpMiddlewareOptions>(options =>
+        {
+            options.OnParseCommandsAsync = context => ImageSharpOptionsHelper.ParseCommandsAsync(context, maxWidth, maxHeight, minQuality);
+        });
 
         return builder;
     }

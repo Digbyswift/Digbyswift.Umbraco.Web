@@ -1,6 +1,7 @@
 ﻿using Digbyswift.Core.Extensions;
 using Digbyswift.Umbraco.Web.ImageSharp;
 using Digbyswift.Umbraco.Web.Providers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SixLabors.ImageSharp.Formats.Png;
@@ -14,17 +15,32 @@ using uConstants = Umbraco.Cms.Core.Constants;
 namespace Digbyswift.Umbraco.Web.NotificationHandlers;
 
 /// <summary>
-/// Resizes images upon saving, to a fixed width and/or height of 2200px. Requires registration of an IFileSystemProvider.
+/// Resizes images upon saving, to a fixed width and/or height of whatever is set in the config
+/// for the following keys or 3000px by default. Requires registration of an IFileSystemProvider.
+/// <list type="bullet">
+/// <item>Umbraco:CMS:Imaging:Resize:MaxWidth</item>
+/// <item>Umbraco:CMS:Imaging:Resize:MaxHeight</item>
+/// </list>
 /// </summary>
 public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandler<MediaSavingNotification>
 {
     private readonly IFileSystemProvider _fileSystemProvider;
     private readonly ILogger _logger;
+    private readonly int _maxWidth;
+    private readonly int _maxHeight;
 
-    public ResizeMediaWhenSavingAsyncHandler(IFileSystemProvider fileSystemProvider, ILogger<ResizeMediaWhenSavingAsyncHandler> logger)
+    public ResizeMediaWhenSavingAsyncHandler(
+        IFileSystemProvider fileSystemProvider,
+        IConfiguration configuration,
+        ILogger<ResizeMediaWhenSavingAsyncHandler> logger)
     {
         _fileSystemProvider = fileSystemProvider;
         _logger = logger;
+
+        _maxWidth = configuration.GetValue<int?>("Umbraco:CMS:Imaging:Resize:MaxWidth") ?? ImageSharpConstants.DefaultMaxWidth;
+        _maxHeight = configuration.GetValue<int?>("Umbraco:CMS:Imaging:Resize:MaxHeight") ?? ImageSharpConstants.DefaultMaxHeight;
+
+        _logger.LogInformation("Resizing handler registered with values: {maxWidth} x {maxHeight} #media", _maxWidth, _maxHeight);
     }
 
     public async Task HandleAsync(MediaSavingNotification notification, CancellationToken cancellationToken)
@@ -43,12 +59,12 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
                 var originalWidth = image.Width;
                 var originalHeight = image.Height;
 
-                if (originalWidth < ImageSharpConstants.MaxImageWidth && originalHeight < ImageSharpConstants.MaxImageHeight)
+                if (originalWidth < _maxWidth && originalHeight < _maxHeight)
                     return;
 
                 image.Mutate(x => x.Resize(new ResizeOptions
                 {
-                    Size = new Size(ImageSharpConstants.MaxImageWidth, ImageSharpConstants.MaxImageHeight),
+                    Size = new Size(_maxWidth, _maxHeight),
                     Sampler = KnownResamplers.Lanczos3,
                     Mode = ResizeMode.Max
                 }));
@@ -106,7 +122,7 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
             return false;
 
         var extension = Path.GetExtension(workingImagePath);
-        if (!ImageSharpConstants.GetSupportedExtensions().ContainsIgnoreCase(extension))
+        if (!ImageSharpConstants.GetSupportedExtensions.ContainsIgnoreCase(extension))
             return false;
 
         imagePath = workingImagePath;

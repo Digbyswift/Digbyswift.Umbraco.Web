@@ -17,7 +17,6 @@ public static class ServiceCollectionExtensions
     /// <item>AddBackOffice()</item>
     /// <item>AddWebsite()</item>
     /// <item>AddComposers()</item>
-    /// <item>AddRegistrar()</item>
     /// <item>AddAzureBlobMediaFileSystem()</item>
     /// <item>AddAzureBlobImageSharpCache()</item>
     /// <item>AddCdnMediaUrlProvider()</item>
@@ -31,7 +30,6 @@ public static class ServiceCollectionExtensions
             .AddBackOffice()
             .AddWebsite()
             .AddComposers()
-            .AddRegistrar()
             .AddAzureBlobMediaFileSystem()
             .AddAzureBlobImageSharpCache()
             .AddCdnMediaUrlProvider()

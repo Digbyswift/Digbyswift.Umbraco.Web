@@ -56,12 +56,12 @@ public static class ImageCommandContextExtensions
         return context;
     }
 
-    public static ImageCommandContext EnsureValidWidthCommand(this ImageCommandContext context)
+    public static ImageCommandContext EnsureValidWidthCommand(this ImageCommandContext context, int maxWidth)
     {
         if (context.Commands.Keys.Contains(ImageSharpCommandConstants.WidthKey))
         {
             var widthValue = context.Commands[ImageSharpCommandConstants.WidthKey];
-            if (!Int32.TryParse(widthValue, out var width) || width > ImageSharpConstants.MaxImageWidth)
+            if (!Int32.TryParse(widthValue, out var width) || width > maxWidth)
             {
                 context.Commands.Remove(ImageSharpCommandConstants.WidthKey);
             }
@@ -70,12 +70,12 @@ public static class ImageCommandContextExtensions
         return context;
     }
 
-    public static ImageCommandContext EnsureValidHeightCommand(this ImageCommandContext context)
+    public static ImageCommandContext EnsureValidHeightCommand(this ImageCommandContext context, int maxHeight)
     {
         if (context.Commands.Keys.Contains(ImageSharpCommandConstants.HeightKey))
         {
             var heightValue = context.Commands[ImageSharpCommandConstants.HeightKey];
-            if (!Int32.TryParse(heightValue, out var height) || height > ImageSharpConstants.MaxImageHeight)
+            if (!Int32.TryParse(heightValue, out var height) || height > maxHeight)
             {
                 context.Commands.Remove(ImageSharpCommandConstants.HeightKey);
             }
