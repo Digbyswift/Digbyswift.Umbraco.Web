@@ -7,7 +7,7 @@ public static class GuidExtensions
 {
     public static Udi ToUdi(this Guid value, string entityType = uConstants.UdiEntityType.Document)
     {
-        if(value == Guid.Empty)
+        if (value == Guid.Empty)
             throw new ArgumentOutOfRangeException(nameof(value), "Cannot be empty");
 
         return Udi.Create(entityType, value);

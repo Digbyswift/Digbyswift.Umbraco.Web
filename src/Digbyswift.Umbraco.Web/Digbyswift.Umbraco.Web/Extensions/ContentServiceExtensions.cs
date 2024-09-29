@@ -5,10 +5,9 @@ namespace Digbyswift.Umbraco.Web.Extensions;
 
 public static class ContentServiceExtensions
 {
-
     public static IEnumerable<IContent> GetAllChildren(this IContentService contentService, int parentId)
     {
-        int currentPageIndex = 0;
+        var currentPageIndex = 0;
         long totalRecords;
         var retrievedContent = new List<IContent>();
 
@@ -24,18 +23,17 @@ public static class ContentServiceExtensions
 
     public static IEnumerable<IContent> GetAllOfType(this IContentService contentService, int contentTypeId)
     {
-        int currentPageIndex = 0;
+        var currentPageIndex = 0;
         long totalRecords;
         var retrievedContent = new List<IContent>();
 
         do
         {
-            var pagedChildren = contentService.GetPagedOfTypes(new [] { contentTypeId }, currentPageIndex++, 100, out totalRecords, null);
+            var pagedChildren = contentService.GetPagedOfTypes([contentTypeId], currentPageIndex++, 100, out totalRecords, null);
             retrievedContent.AddRange(pagedChildren);
         }
         while (totalRecords > retrievedContent.Count);
 
         return retrievedContent;
     }
-
 }

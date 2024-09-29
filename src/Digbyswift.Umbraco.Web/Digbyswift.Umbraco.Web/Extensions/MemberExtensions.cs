@@ -26,8 +26,7 @@ public static class MemberExtensions
 
         identity.Id = member.Id.ToString();
         identity.Key = member.Key;
-            
+
         return identity;
     }
-
 }

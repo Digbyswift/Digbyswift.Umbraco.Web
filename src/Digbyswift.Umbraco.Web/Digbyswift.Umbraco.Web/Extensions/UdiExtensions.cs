@@ -6,7 +6,7 @@ public static class UdiExtensions
 {
     public static Guid ToGuid(this Udi value)
     {
-        if(value == null)
+        if (value == null)
             throw new ArgumentNullException(nameof(value));
 
         var guidUdi = value as GuidUdi;

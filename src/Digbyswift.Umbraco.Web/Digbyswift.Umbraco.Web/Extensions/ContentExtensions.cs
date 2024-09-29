@@ -6,20 +6,11 @@ namespace Digbyswift.Umbraco.Web.Extensions;
 
 public static class ContentExtensions
 {
-
     public static Dictionary<string, object?> GetDirtyProperties(this IContent content)
     {
-        var dirtyEntries = new Dictionary<string, object?>();
-
-        foreach (var property in content.Properties)
-        {
-            if (content.IsPropertyDirty(property.Alias))
-            {
-                dirtyEntries.Add(property.Alias, property.GetValue());
-            }
-        }
-
-        return dirtyEntries;
+        return content.Properties
+            .Where(property => content.IsPropertyDirty(property.Alias))
+            .ToDictionary(property => property.Alias, property => property.GetValue());
     }
 
     public static void SetValueAsDocumentUdi(this IContent content, string alias, Guid contentKey)
@@ -41,5 +32,4 @@ public static class ContentExtensions
     {
         content.SetValue(alias, Udi.Create(uConstants.UdiEntityType.Element, contentKey).ToString());
     }
-
 }

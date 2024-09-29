@@ -1,3 +1,4 @@
+#pragma warning disable SA1402
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Web.Website.Controllers;
@@ -6,8 +7,8 @@ namespace Digbyswift.Umbraco.Web.Controllers;
 
 public abstract class BaseSurfaceController : SurfaceController
 {
-    protected readonly ILogger Logger;
-    protected readonly IViewRenderer ViewRenderer;
+    protected ILogger Logger { get; }
+    protected IViewRenderer ViewRenderer { get; }
 
     protected BaseSurfaceController(SurfaceControllerDependencies defaultDependencies) : base(
         defaultDependencies.UmbracoContextAccessor,
@@ -21,7 +22,7 @@ public abstract class BaseSurfaceController : SurfaceController
         ViewRenderer = defaultDependencies.ViewRenderer;
     }
 }
-    
+
 public abstract class BaseSurfaceController<T> : BaseSurfaceController where T : class, IPublishedContent
 {
     protected T? TypedCurrentPage => CurrentPage as T;

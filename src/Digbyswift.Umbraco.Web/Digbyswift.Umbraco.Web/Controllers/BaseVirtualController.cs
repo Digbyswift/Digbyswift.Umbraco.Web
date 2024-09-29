@@ -1,3 +1,6 @@
+#pragma warning disable SA1402
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
@@ -8,9 +11,9 @@ namespace Digbyswift.Umbraco.Web.Controllers;
 
 public abstract class BaseVirtualController : UmbracoPageController, IVirtualPageController
 {
-    protected readonly ILogger Logger;
-    protected readonly ICompositeViewEngine CompositeViewEngine;
-    protected readonly IViewRenderer ViewRenderer;
+    protected ILogger Logger { get; }
+    protected ICompositeViewEngine CompositeViewEngine { get; }
+    protected IViewRenderer ViewRenderer { get; }
 
     protected BaseVirtualController(VirtualControllerDependencies defaultDependencies) : base(
         defaultDependencies.Logger,
@@ -23,9 +26,16 @@ public abstract class BaseVirtualController : UmbracoPageController, IVirtualPag
 
     public abstract IPublishedContent FindContent(ActionExecutingContext actionExecutingContext);
 
+    [NonAction]
     public async Task<string> RenderToStringAsync<TModel>(string viewPath, TModel model)
     {
         return await ViewRenderer.RenderAsStringAsync(this, viewPath, model);
+    }
+
+    [NonAction]
+    public async Task<HtmlString> RenderToHtmlStringAsync<TModel>(string viewPath, TModel model)
+    {
+        return await ViewRenderer.RenderAsHtmlStringAsync(this, viewPath, model);
     }
 }
 

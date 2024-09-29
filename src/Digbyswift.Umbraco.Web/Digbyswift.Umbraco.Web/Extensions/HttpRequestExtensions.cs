@@ -27,26 +27,20 @@ public static class HttpRequestExtensions
         previewId = GetPreviewId(request);
         return previewId != null;
     }
-        
+
     /// <summary>
-    /// Returns true if the path is a reserved Umbraco path, / or null
+    /// Returns true if the path is a reserved Umbraco path, / or null.
     /// </summary>
     public static bool IsReservedPath(this HttpRequest request)
     {
         if (request.Path.Value is null or StringConstants.ForwardSlash)
             return true;
 
-        foreach (var x in Constants.UmbracoReservedPaths)
-        {
-            if (request.Path.StartsWithSegments(x)) return true;
-        }
-
-        return false;
+        return Constants.UmbracoReservedPaths.Any(x => request.Path.StartsWithSegments(x));
     }
 
     public static bool IsMediaPath(this HttpRequest request)
     {
         return request.Path.Value?.StartsWith(Constants.UmbracoMediaPath, StringComparison.CurrentCultureIgnoreCase) ?? false;
     }
-
 }

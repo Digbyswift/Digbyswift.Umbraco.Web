@@ -2,36 +2,32 @@
 
 public static class Constants
 {
-    /// <summary>
-    /// /umbraco
-    /// </summary>
     public const string UmbracoRootPath = "/umbraco/";
-
-    /// <summary>
-    /// /app_plugins
-    /// </summary>
     public const string UmbracoPluginRootPath = "/app_plugins/";
-
-    /// <summary>
-    /// /media
-    /// </summary>
     public const string UmbracoMediaPath = "/media/";
-
-    /// <summary>
-    /// /install
-    /// </summary>
     public const string UmbracoInstallPath = "/install/";
 
     /// <summary>
-    /// /umbraco, /app_plugins, /install, /sb
+    /// Gets the following paths:
+    /// <list type="bullet">
+    /// <item>/umbraco/</item>
+    /// <item>/app_plugins/</item>
+    /// <item>/media/</item>
+    /// <item>/install/</item>
+    /// <item>/base</item>
+    /// <item>/sb</item>
+    /// </list>
     /// </summary>
-    public static readonly string[] UmbracoReservedPaths = 
+    public static IEnumerable<string> UmbracoReservedPaths
     {
-        UmbracoRootPath,
-        UmbracoPluginRootPath,
-        UmbracoInstallPath,
-        UmbracoMediaPath,
-        "/base",
-        "/sb",
-    };
+        get
+        {
+            yield return UmbracoRootPath;
+            yield return UmbracoPluginRootPath;
+            yield return UmbracoInstallPath;
+            yield return UmbracoMediaPath;
+            yield return "/base";
+            yield return "/sb";
+        }
+    }
 }

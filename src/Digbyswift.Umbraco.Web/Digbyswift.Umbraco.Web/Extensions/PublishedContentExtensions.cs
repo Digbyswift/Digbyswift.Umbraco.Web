@@ -3,13 +3,13 @@ using Umbraco.Extensions;
 
 namespace Digbyswift.Umbraco.Web.Extensions;
 
-public static class PublishedContentMetaExtensions
+public static class PublishedContentExtensions
 {
     public static string TypeAlias(this IPublishedContent item)
     {
         return item.ContentType.Alias;
     }
-        
+
     public static bool Is(this IPublishedContent content, string alias)
     {
         if (content == null)

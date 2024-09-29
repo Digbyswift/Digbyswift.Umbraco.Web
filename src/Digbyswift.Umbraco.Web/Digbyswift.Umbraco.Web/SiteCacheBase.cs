@@ -9,20 +9,18 @@ namespace Digbyswift.Umbraco.Web;
 /// <summary>
 /// An abstract class for basing a simple repository style collection of shortcuts to published content.
 /// </summary>
-public abstract class SiteCacheBase : IDisposable
+public abstract class SiteCacheBase
 {
-    private readonly UmbracoContextReference _contextReference;
-
-    protected readonly IPublishedContentCache? ContentCache;
-    protected readonly HttpContext? HttpContext;
+    protected IPublishedContentCache? ContentCache { get; }
+    protected HttpContext? HttpContext { get; }
 
     protected SiteCacheBase(IHttpContextAccessor httpContextAccessor, IUmbracoContextFactory contextFactory)
     {
         HttpContext = httpContextAccessor.HttpContext ?? throw new InvalidOperationException("CurrentSiteCache cannot be used when HttpContext is null");
 
-        _contextReference = contextFactory.EnsureUmbracoContext();
+        var contextReference = contextFactory.EnsureUmbracoContext();
 
-        ContentCache = _contextReference.UmbracoContext.Content;
+        ContentCache = contextReference.UmbracoContext.Content;
     }
 
     public IPublishedContent? Get(int id)
@@ -43,19 +41,5 @@ public abstract class SiteCacheBase : IDisposable
     public T? Get<T>(Udi udi) where T : class, IPublishedContent
     {
         return Get(udi) as T;
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _contextReference?.Dispose();
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
     }
 }

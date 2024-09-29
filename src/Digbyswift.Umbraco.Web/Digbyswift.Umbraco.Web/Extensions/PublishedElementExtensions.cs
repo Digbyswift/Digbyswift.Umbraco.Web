@@ -8,7 +8,7 @@ public static class PublishedElementExtensions
     {
         return item.ContentType.Alias;
     }
-        
+
     public static bool Is(this IPublishedElement element, string alias)
     {
         if (element == null)
@@ -18,6 +18,11 @@ public static class PublishedElementExtensions
             throw new ArgumentNullException(nameof(alias));
 
         return element.ContentType.Alias.Equals(alias);
+    }
+
+    public static bool IsNot(this IPublishedElement element, string alias)
+    {
+        return !Is(element, alias);
     }
 
     public static bool IsAny(this IPublishedElement element, params string[] alias)

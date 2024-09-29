@@ -6,10 +6,10 @@ namespace Digbyswift.Umbraco.Web.Controllers;
 
 public class VirtualControllerDependencies
 {
-    public readonly ILogger<BaseVirtualController> Logger;
-    public readonly ICompositeViewEngine CompositeViewEngine;
-    public readonly IUmbracoContextAccessor UmbracoContextAccessor;
-    public readonly IViewRenderer ViewRenderer;
+    public ILogger<BaseVirtualController> Logger { get; }
+    public ICompositeViewEngine CompositeViewEngine { get; }
+    public IUmbracoContextAccessor UmbracoContextAccessor { get; }
+    public IViewRenderer ViewRenderer { get; }
 
     public VirtualControllerDependencies(
         ILogger<BaseVirtualController> logger,

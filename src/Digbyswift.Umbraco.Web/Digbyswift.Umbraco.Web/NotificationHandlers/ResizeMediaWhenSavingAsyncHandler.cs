@@ -1,9 +1,9 @@
 ﻿using Digbyswift.Core.Extensions;
+using Digbyswift.Umbraco.Web.ImageSharp;
 using Digbyswift.Umbraco.Web.Providers;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Png;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Notifications;
@@ -18,10 +18,6 @@ namespace Digbyswift.Umbraco.Web.NotificationHandlers;
 /// </summary>
 public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandler<MediaSavingNotification>
 {
-    private static readonly string[] SupportedTypes = { ".jpeg", ".jpg", ".gif", ".bmp", ".png", ".tiff", ".tif" };
-    private const int MaxImageWidth = 2200;
-    private const int MaxImageHeight = 2200;
-
     private readonly IFileSystemProvider _fileSystemProvider;
     private readonly ILogger _logger;
 
@@ -40,38 +36,38 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
                 if (!TryGetImagePath(media, out var relativeImagePath) || relativeImagePath == null)
                     continue;
 
-                await using (var stream = await _fileSystemProvider.GetAsStreamAsync(relativeImagePath))
-                using (var image = Image.Load(stream, out var format))
+                await using var stream = await _fileSystemProvider.GetAsStreamAsync(relativeImagePath);
+                using var image = await Image.LoadAsync(stream, cancellationToken);
+
+                var originalFormat = image.Metadata.DecodedImageFormat ?? PngFormat.Instance;
+                var originalWidth = image.Width;
+                var originalHeight = image.Height;
+
+                if (originalWidth < ImageSharpConstants.MaxImageWidth && originalHeight < ImageSharpConstants.MaxImageHeight)
+                    return;
+
+                image.Mutate(x => x.Resize(new ResizeOptions
                 {
-                    var originalWidth = image.Width;
-                    var originalHeight = image.Height;
+                    Size = new Size(ImageSharpConstants.MaxImageWidth, ImageSharpConstants.MaxImageHeight),
+                    Sampler = KnownResamplers.Lanczos3,
+                    Mode = ResizeMode.Max
+                }));
 
-                    if (originalWidth < MaxImageWidth && originalHeight < MaxImageHeight)
-                        return;
+                using (var tempStream = new MemoryStream())
+                {
+                    await image.SaveAsync(tempStream, originalFormat, cancellationToken);
 
-                    image.Mutate(x => x.Resize(new ResizeOptions
-                    {
-                        Size = new Size(MaxImageWidth, MaxImageHeight),
-                        Sampler = KnownResamplers.Lanczos3,
-                        Mode = ResizeMode.Max
-                    }));
+                    // Reset stream
+                    tempStream.Position = 0;
 
-                    using (var tempStream = new MemoryStream())
-                    {
-                        await image.SaveAsync(tempStream, format, cancellationToken);
+                    // Upload
+                    await _fileSystemProvider.SaveAsync(tempStream, relativeImagePath, originalFormat.DefaultMimeType, disposeOfStream: false);
 
-                        // Reset stream
-                        tempStream.Position = 0;
+                    media.SetValue(uConstants.Conventions.Media.Width, image.Width);
+                    media.SetValue(uConstants.Conventions.Media.Height, image.Height);
+                    media.SetValue(uConstants.Conventions.Media.Bytes, tempStream.Length);
 
-                        // Upload
-                        await _fileSystemProvider.SaveAsync(tempStream, relativeImagePath, format.DefaultMimeType, disposeOfStream: false);
-
-                        media.SetValue(uConstants.Conventions.Media.Width, image.Width);
-                        media.SetValue(uConstants.Conventions.Media.Height, image.Height);
-                        media.SetValue(uConstants.Conventions.Media.Bytes, tempStream.Length);
-
-                        _logger.LogInformation("Media {relativeImagePath} ({originalWidth} x {originalHeight}) resized on upload #media", relativeImagePath, originalWidth, originalHeight);
-                    }
+                    _logger.LogInformation("Media {relativeImagePath} ({originalWidth} x {originalHeight}) resized on upload #media", relativeImagePath, originalWidth, originalHeight);
                 }
             }
         }
@@ -80,14 +76,14 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
             _logger.LogError(ex, "Media resize on upload failed #media");
         }
     }
-        
+
     private static bool TryGetImagePath(IContentBase media, out string? imagePath)
     {
         imagePath = null;
-            
+
         if (!media.HasProperty(uConstants.Conventions.Media.File))
             return false;
-                    
+
         var umbracoFileProp = media.GetValue<string>(uConstants.Conventions.Media.File);
         if (String.IsNullOrWhiteSpace(umbracoFileProp))
             return false;
@@ -109,12 +105,11 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
         if (String.IsNullOrWhiteSpace(workingImagePath))
             return false;
 
-        string extension = Path.GetExtension(workingImagePath);
-        if (!SupportedTypes.ContainsIgnoreCase(extension))
+        var extension = Path.GetExtension(workingImagePath);
+        if (!ImageSharpConstants.GetSupportedExtensions().ContainsIgnoreCase(extension))
             return false;
 
         imagePath = workingImagePath;
         return true;
     }
-        
 }

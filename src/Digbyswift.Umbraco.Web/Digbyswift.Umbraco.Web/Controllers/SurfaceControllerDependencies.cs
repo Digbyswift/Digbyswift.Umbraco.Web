@@ -10,14 +10,14 @@ namespace Digbyswift.Umbraco.Web.Controllers;
 
 public class SurfaceControllerDependencies
 {
-    public readonly IViewRenderer ViewRenderer;
-    public readonly ILogger<BaseSurfaceController> Logger;
-    public readonly IUmbracoContextAccessor UmbracoContextAccessor;
-    public readonly IUmbracoDatabaseFactory DatabaseFactory;
-    public readonly ServiceContext Services;
-    public readonly AppCaches AppCaches;
-    public readonly IProfilingLogger ProfilingLogger;
-    public readonly IPublishedUrlProvider PublishedUrlProvider;
+    public IViewRenderer ViewRenderer { get; }
+    public ILogger<BaseSurfaceController> Logger { get; }
+    public IUmbracoContextAccessor UmbracoContextAccessor { get; }
+    public IUmbracoDatabaseFactory DatabaseFactory { get; }
+    public ServiceContext Services { get; }
+    public AppCaches AppCaches { get; }
+    public IProfilingLogger ProfilingLogger { get; }
+    public IPublishedUrlProvider PublishedUrlProvider { get; }
 
     public SurfaceControllerDependencies(
         ILogger<BaseSurfaceController> logger,

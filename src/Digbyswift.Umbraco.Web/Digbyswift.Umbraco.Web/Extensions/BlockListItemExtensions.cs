@@ -8,9 +8,14 @@ public static class BlockListItemExtensions
     {
         return item.Content.ContentType.Alias;
     }
-        
+
     public static bool Is(this BlockListItem item, string alias)
     {
         return item.TypeAlias().Equals(alias);
+    }
+
+    public static bool IsNot(this BlockListItem item, string alias)
+    {
+        return !item.Is(alias);
     }
 }
