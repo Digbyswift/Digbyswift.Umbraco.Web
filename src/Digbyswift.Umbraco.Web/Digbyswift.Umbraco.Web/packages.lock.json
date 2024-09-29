@@ -58,6 +58,17 @@
           "StyleCop.Analyzers.Unstable": "1.2.0.556"
         }
       },
+      "Umbraco.Cms.Web.BackOffice": {
+        "type": "Direct",
+        "requested": "[12.3.10, )",
+        "resolved": "12.3.10",
+        "contentHash": "1sub9/NgpuIdRI323tQoNmTCkSGTBVL13DQeQHaKdk5YwYmaQ476d6/EOOsuPSjQhFd0HevYpImj8Yp4j9+zNw==",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3",
+          "Serilog.AspNetCore": "7.0.0",
+          "Umbraco.Cms.Web.Common": "12.3.10"
+        }
+      },
       "Umbraco.Cms.Web.Common": {
         "type": "Direct",
         "requested": "[12.3.10, )",
@@ -83,6 +94,28 @@
         "contentHash": "Yvjdh4bRiPrzmMQeLIUp7JsWKfkbh3oGRkBZsIZoikqkwY/U//XDnQNjvW606o16MdzxHuos3g6eMcVzIsX+yg==",
         "dependencies": {
           "Umbraco.Cms.Web.Common": "12.3.10"
+        }
+      },
+      "Umbraco.StorageProviders.AzureBlob": {
+        "type": "Direct",
+        "requested": "[12.0.1, )",
+        "resolved": "12.0.1",
+        "contentHash": "Yx28z9f43gk1OcWH5WOf/rMFmg18oQVZ9rjV36IkDL8oXdbVzmn9S+tfUAw5wxl/gAm2T9DPouR/9MZHYTD1Tg==",
+        "dependencies": {
+          "Azure.Storage.Blobs": "12.16.0",
+          "Umbraco.Cms.Web.Common": "[12.0.0, 13.0.0)",
+          "Umbraco.StorageProviders": "[12.0.1, 13.0.0)"
+        }
+      },
+      "Umbraco.StorageProviders.AzureBlob.ImageSharp": {
+        "type": "Direct",
+        "requested": "[12.0.1, )",
+        "resolved": "12.0.1",
+        "contentHash": "2WrjIbEgZRxMRQaBQw/3wbrspoMleeWA9NSQsQ6p8EFdPfK24cJPwginytHuUkZknzNN7ONcUgkdV8x+taR3Cw==",
+        "dependencies": {
+          "SixLabors.ImageSharp.Web.Providers.Azure": "3.0.1",
+          "Umbraco.Cms.Imaging.ImageSharp": "[12.0.0, 13.0.0)",
+          "Umbraco.StorageProviders.AzureBlob": "[12.0.1, 13.0.0)"
         }
       },
       "Asp.Versioning.Abstractions": {
@@ -144,6 +177,24 @@
           "System.Security.Cryptography.ProtectedData": "4.7.0",
           "System.Text.Json": "4.7.2",
           "System.Threading.Tasks.Extensions": "4.5.4"
+        }
+      },
+      "Azure.Storage.Blobs": {
+        "type": "Transitive",
+        "resolved": "12.16.0",
+        "contentHash": "1ibzh49byOzB2ds6k9bsPqXvxxzdc2U9+MmooDr/lYJHgaWEnPZYX/i04vH0oN0jBGN1diW4N27xER8npvOzCw==",
+        "dependencies": {
+          "Azure.Storage.Common": "12.15.0",
+          "System.Text.Json": "4.7.2"
+        }
+      },
+      "Azure.Storage.Common": {
+        "type": "Transitive",
+        "resolved": "12.15.0",
+        "contentHash": "/SAgn9hhjfHO0RPWp0ilGLr3aMPz+rrz6iRgLKTb1708pI78WLtsQ7/kGooUbCU2flSnk/egmJ0Qj9rFVks/nA==",
+        "dependencies": {
+          "Azure.Core": "1.31.0",
+          "System.IO.Hashing": "6.0.0"
         }
       },
       "BouncyCastle.Cryptography": {
@@ -1099,6 +1150,22 @@
         "resolved": "3.0.0",
         "contentHash": "aKLycLo/ELJu9bargBjgEJOdR2y0HP1nzVqy1KZjuuuL7f6O+fkq7LCKVvmhzBNq7Ewb9gLvBXXZxWg1x1czrw=="
       },
+      "Serilog.AspNetCore": {
+        "type": "Transitive",
+        "resolved": "7.0.0",
+        "contentHash": "F6p6rzOmg/R0EPI/PjJXcAlhCzusW5+xFx8kbsy6mJ6/mHI6wWWPxZbsLPoAYTpMiopKFl7HZhAr//KABGHtBQ==",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "7.0.0",
+          "Microsoft.Extensions.Logging": "7.0.0",
+          "Serilog": "2.12.0",
+          "Serilog.Extensions.Hosting": "7.0.0",
+          "Serilog.Formatting.Compact": "1.1.0",
+          "Serilog.Settings.Configuration": "7.0.0",
+          "Serilog.Sinks.Console": "4.0.1",
+          "Serilog.Sinks.Debug": "2.0.0",
+          "Serilog.Sinks.File": "5.0.0"
+        }
+      },
       "Serilog.Enrichers.Process": {
         "type": "Transitive",
         "resolved": "2.0.2",
@@ -1179,6 +1246,22 @@
           "Serilog": "2.9.0"
         }
       },
+      "Serilog.Sinks.Console": {
+        "type": "Transitive",
+        "resolved": "4.0.1",
+        "contentHash": "apLOvSJQLlIbKlbx+Y2UDHSP05kJsV7mou+fvJoRGs/iR+jC22r8cuFVMjjfVxz/AD4B2UCltFhE1naRLXwKNw==",
+        "dependencies": {
+          "Serilog": "2.10.0"
+        }
+      },
+      "Serilog.Sinks.Debug": {
+        "type": "Transitive",
+        "resolved": "2.0.0",
+        "contentHash": "Y6g3OBJ4JzTyyw16fDqtFcQ41qQAydnEvEqmXjhwhgjsnG/FaJ8GUqF5ldsC/bVkK8KYmqrPhDO+tm4dF6xx4A==",
+        "dependencies": {
+          "Serilog": "2.10.0"
+        }
+      },
       "Serilog.Sinks.File": {
         "type": "Transitive",
         "resolved": "5.0.0",
@@ -1199,6 +1282,15 @@
         "type": "Transitive",
         "resolved": "3.1.5",
         "contentHash": "lNtlq7dSI/QEbYey+A0xn48z5w4XHSffF8222cC4F4YwTXfEImuiBavQcWjr49LThT/pRmtWJRcqA/PlL+eJ6g=="
+      },
+      "SixLabors.ImageSharp.Web.Providers.Azure": {
+        "type": "Transitive",
+        "resolved": "3.0.1",
+        "contentHash": "TLxPYTqqq2LZoQEgks8e2ZrnXFy26uw8R6rFp4Iw8A9C6eKIQ0ECFcKUNYVZPTssqfFlHUHr6KkW4hXa9x9w3g==",
+        "dependencies": {
+          "Azure.Storage.Blobs": "12.15.1",
+          "SixLabors.ImageSharp.Web": "3.0.1"
+        }
       },
       "Smidge": {
         "type": "Transitive",
@@ -1572,6 +1664,11 @@
         "dependencies": {
           "System.Runtime": "4.3.0"
         }
+      },
+      "System.IO.Hashing": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "Rfm2jYCaUeGysFEZjDe7j1R4x6Z6BzumS/vUT5a1AA/AWJuGX71PoGB0RmpyX3VmrGqVnAwtfMn39OHR8Y/5+g=="
       },
       "System.IO.Pipelines": {
         "type": "Transitive",
@@ -2246,6 +2343,16 @@
           "Umbraco.Cms.Infrastructure": "12.3.10"
         }
       },
+      "Umbraco.Cms.Imaging.ImageSharp": {
+        "type": "Transitive",
+        "resolved": "12.0.0",
+        "contentHash": "5mtwUi2qj25CkI2Yno6VpghRttJF2n/Y4ycLJNtR/QkF1SyGLXQsjVqY1mXMV0HKH5UzuP+AMTk3YC8ZMivsfw==",
+        "dependencies": {
+          "SixLabors.ImageSharp": "3.0.1",
+          "SixLabors.ImageSharp.Web": "3.0.1",
+          "Umbraco.Cms.Web.Common": "12.0.0"
+        }
+      },
       "Umbraco.Cms.Infrastructure": {
         "type": "Transitive",
         "resolved": "12.3.10",
@@ -2300,6 +2407,14 @@
         "type": "Transitive",
         "resolved": "15.0.0",
         "contentHash": "YSDIkxq44VMy2N3jBTwJBJ/ZjGyuyb0GRyfQAUIma07dCHIbjXgKXjZaAxVa6ik3XTqgcyATvwYJL0EBtAClwA=="
+      },
+      "Umbraco.StorageProviders": {
+        "type": "Transitive",
+        "resolved": "12.0.1",
+        "contentHash": "1vyrrcVuyhBJc6C2SjGD1Z800Otn0l8u5ZwpPxVBojt4iGRiSR42Vzu4/GLg4H2wRNriYHMqEj7seNpRvRFGTQ==",
+        "dependencies": {
+          "Umbraco.Cms.Web.Common": "[12.0.0, 13.0.0)"
+        }
       }
     }
   }

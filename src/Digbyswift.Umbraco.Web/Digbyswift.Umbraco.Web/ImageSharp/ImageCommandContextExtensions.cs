@@ -1,5 +1,4 @@
 ﻿using Digbyswift.Http.Extensions;
-using Digbyswift.Umbraco.Web.NotificationHandlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp.Web.Middleware;
