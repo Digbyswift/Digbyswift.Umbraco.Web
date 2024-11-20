@@ -6,12 +6,12 @@
         <Nullable>enable</Nullable>
         <RootNamespace>Digbyswift.Umbraco.Web</RootNamespace>
         <Title>Digbyswift.Umbraco.Web</Title>
-        <PackageProjectUrl>https://www.nuget.org/packages/Digbyswift.Umbraco.Web</PackageProjectUrl>
-        <RepositoryUrl>https://www.nuget.org/packages/Digbyswift.Umbraco.Web</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/Digbyswift/Digbyswift.Umbraco.Web</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Digbyswift/Digbyswift.Umbraco.Web</RepositoryUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageTags>c# umbraco</PackageTags>
-        <PackageVersion>13.1.0-beta2</PackageVersion>
+        <PackageTags>c# aspnet umbraco</PackageTags>
+        <PackageVersion>13.1.0-beta3</PackageVersion>
         <AssemblyVersion>13.1.0</AssemblyVersion>
         <FileVersion>13.1.0</FileVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
