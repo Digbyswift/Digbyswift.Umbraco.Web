@@ -65,7 +65,7 @@ public static class UmbracoBuilderExtensions
         return builder;
     }
 
-    public static IUmbracoBuilder SetLocalDb(this IUmbracoBuilder builder)
+    public static IUmbracoBuilder IgnoreLocalDb(this IUmbracoBuilder builder)
     {
         if (builder.Config.GetValue("Umbraco:CMS:NuCache:IgnoreLocalDb", false))
         {

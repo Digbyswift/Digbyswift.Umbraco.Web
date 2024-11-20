@@ -19,10 +19,18 @@ public static class WebApplicationBuilderExtensions
     /// <item>AddAzureBlobMediaFileSystem()</item>
     /// <item>AddAzureBlobImageSharpCache()</item>
     /// <item>AddCdnMediaUrlProvider()</item>
-    /// <item>SetLocalDb()</item>
+    /// <item>AddImageSharpCommandParsing()</item>
+    /// </list>
+    /// Also:
+    /// <list type="bullet">
+    /// <item>AddConnectionStrings()</item>
+    /// <item>AddEnvironmentSettings()</item>
+    /// <item>AddEmailSettings()</item>
+    /// <item>AddAzureCdnSettings()</item>
+    /// <item>AddControllerDependencies()</item>
     /// </list>
     /// </summary>
-    public static IUmbracoBuilder AddCustomUmbracoForAzure(this WebApplicationBuilder services, IWebHostEnvironment env, IConfiguration config)
+    public static IUmbracoBuilder AddCustomUmbracoForAzure(this WebApplicationBuilder services, Action<IUmbracoBuilder>? configure = null)
     {
         var builder = services
             .CreateUmbracoBuilder()
@@ -32,10 +40,21 @@ public static class WebApplicationBuilderExtensions
             .AddAzureBlobMediaFileSystem()
             .AddAzureBlobImageSharpCache()
             .AddCdnMediaUrlProvider()
-            .SetLocalDb();
+            .AddImageSharpCommandParsing()
+
+            // Register settings
+            .AddConnectionStrings()
+            .AddEnvironmentSettings()
+            .AddEmailSettings()
+            .AddAzureCdnSettings();
 
         builder.Dashboards()
             .Remove<ContentDashboard>();
+
+        builder.Services
+            .AddControllerDependencies();
+
+        configure?.Invoke(builder);
 
         return builder;
     }

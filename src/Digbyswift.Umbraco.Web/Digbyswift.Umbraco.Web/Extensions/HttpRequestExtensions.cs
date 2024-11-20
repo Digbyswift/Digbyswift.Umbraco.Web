@@ -29,18 +29,18 @@ public static class HttpRequestExtensions
     }
 
     /// <summary>
-    /// Returns true if the path is a reserved Umbraco path, / or null.
+    /// Returns true if the path is a reserved Umbraco path. Returns false if / or null.
     /// </summary>
     public static bool IsReservedPath(this HttpRequest request)
     {
         if (request.Path.Value is null or StringConstants.ForwardSlash)
-            return true;
+            return false;
 
-        return Constants.UmbracoReservedPaths.Any(x => request.Path.StartsWithSegments(x));
+        return Constants.ReservedPaths.Any(x => request.Path.StartsWithSegments(x));
     }
 
     public static bool IsMediaPath(this HttpRequest request)
     {
-        return request.Path.Value?.StartsWith(Constants.UmbracoMediaPath, StringComparison.CurrentCultureIgnoreCase) ?? false;
+        return request.Path.Value?.StartsWith(Constants.MediaPath, StringComparison.CurrentCultureIgnoreCase) ?? false;
     }
 }

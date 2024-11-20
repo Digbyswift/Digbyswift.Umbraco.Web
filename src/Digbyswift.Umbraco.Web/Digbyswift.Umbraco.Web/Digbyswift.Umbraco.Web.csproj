@@ -11,7 +11,7 @@
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>c# umbraco</PackageTags>
-        <PackageVersion>13.1.0-beta1</PackageVersion>
+        <PackageVersion>13.1.0-beta2</PackageVersion>
         <AssemblyVersion>13.1.0</AssemblyVersion>
         <FileVersion>13.1.0</FileVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -36,8 +36,5 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="..\..\..\README.md" Pack="true" PackagePath="" />
-    </ItemGroup>
-    <ItemGroup>
-      <Compile Remove="Controllers\DefaultController.cs" />
     </ItemGroup>
 </Project>
