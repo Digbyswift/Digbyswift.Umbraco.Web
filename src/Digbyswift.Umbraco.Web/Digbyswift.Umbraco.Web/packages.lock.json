@@ -4,9 +4,9 @@
     "net8.0": {
       "Digbyswift.AspNet": {
         "type": "Direct",
-        "requested": "[7.1.0-beta3, )",
-        "resolved": "7.1.0-beta3",
-        "contentHash": "7t7Z7QMsqoPJHf44OeDkIdwvXbwHSi/VJD4yd4yAC0olbG51hCEAPegCVBw6QvMPLf6nlxYrrDv9HY2kvdUljg==",
+        "requested": "[7.1.0, )",
+        "resolved": "7.1.0",
+        "contentHash": "2ZM5hJRsmp9dxC+Ys4eVmODEDFb8Wn+Gm6xGXIab7jTNhwQTAu6V9nWUnad70ijugC6nKhtndo5f/4q9C6zt3g==",
         "dependencies": {
           "Digbyswift.Core": "2.2.0",
           "Digbyswift.Http": "1.3.0",
