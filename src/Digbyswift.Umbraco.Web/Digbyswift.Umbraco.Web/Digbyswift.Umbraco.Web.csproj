@@ -11,9 +11,9 @@
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>c# umbraco</PackageTags>
-        <PackageVersion>12.0.0</PackageVersion>
-        <AssemblyVersion>12.0.0</AssemblyVersion>
-        <FileVersion>12.0.0</FileVersion>
+        <PackageVersion>12.0.1-preview0</PackageVersion>
+        <AssemblyVersion>12.0.1</AssemblyVersion>
+        <FileVersion>12.0.1</FileVersion>
     </PropertyGroup>
     <ItemGroup>
       <PackageReference Include="Digbyswift.Core" Version="2.2.0" />
