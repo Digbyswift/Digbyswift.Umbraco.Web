@@ -1,30 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net7.0</TargetFrameworks>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Digbyswift.Umbraco.Web</RootNamespace>
         <Title>Digbyswift.Umbraco.Web</Title>
-        <PackageProjectUrl>https://www.nuget.org/packages/Digbyswift.Umbraco.Web</PackageProjectUrl>
-        <RepositoryUrl>https://www.nuget.org/packages/Digbyswift.Umbraco.Web</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/Digbyswift/Digbyswift.Umbraco.Web</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Digbyswift/Digbyswift.Umbraco.Web</RepositoryUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageTags>c# umbraco</PackageTags>
-        <PackageVersion>12.0.1-preview0</PackageVersion>
-        <AssemblyVersion>12.0.1</AssemblyVersion>
-        <FileVersion>12.0.1</FileVersion>
+        <PackageTags>c# aspnet umbraco</PackageTags>
+        <PackageVersion>13.3.0</PackageVersion>
+        <AssemblyVersion>13.3.0</AssemblyVersion>
+        <FileVersion>13.3.0</FileVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="Digbyswift.Core" Version="2.2.0" />
-      <PackageReference Include="Digbyswift.Http" Version="1.3.0" />
+      <PackageReference Include="Digbyswift.AspNet" Version="7.2.1" />
+      <PackageReference Include="Digbyswift.Core" Version="2.5.6" />
+      <PackageReference Include="Digbyswift.Http" Version="1.5.0" />
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
       <PackageReference Include="SixLabors.ImageSharp.Web" Version="3.1.3" />
-      <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="12.3.10" />
-      <PackageReference Include="Umbraco.Cms.Web.Common" Version="12.3.10" />
-      <PackageReference Include="Umbraco.Cms.Web.Website" Version="12.3.10" />
-      <PackageReference Include="Umbraco.StorageProviders.AzureBlob" Version="12.0.1" />
-      <PackageReference Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" Version="12.0.1" />
+      <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.5.2" />
+      <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.5.2" />
+      <PackageReference Include="Umbraco.Cms.Web.Website" Version="13.5.2" />
+      <PackageReference Include="Umbraco.StorageProviders.AzureBlob" Version="13.1.0" />
+      <PackageReference Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" Version="13.1.0" />
     </ItemGroup>
     <ItemGroup>
       <None Include="..\..\..\package-icon.png" Pack="true" PackagePath="" />
@@ -34,8 +35,5 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="..\..\..\README.md" Pack="true" PackagePath="" />
-    </ItemGroup>
-    <ItemGroup>
-      <Compile Remove="Controllers\DefaultController.cs" />
     </ItemGroup>
 </Project>
