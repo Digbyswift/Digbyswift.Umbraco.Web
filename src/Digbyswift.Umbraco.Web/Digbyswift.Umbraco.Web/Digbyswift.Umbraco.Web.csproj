@@ -11,14 +11,14 @@
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>c# aspnet umbraco</PackageTags>
-        <PackageVersion>13.2.0</PackageVersion>
-        <AssemblyVersion>13.2.0</AssemblyVersion>
-        <FileVersion>13.2.0</FileVersion>
+        <PackageVersion>13.3.0</PackageVersion>
+        <AssemblyVersion>13.3.0</AssemblyVersion>
+        <FileVersion>13.3.0</FileVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="Digbyswift.AspNet" Version="7.1.0" />
-      <PackageReference Include="Digbyswift.Core" Version="2.3.0" />
+      <PackageReference Include="Digbyswift.AspNet" Version="7.2.1" />
+      <PackageReference Include="Digbyswift.Core" Version="2.5.6" />
       <PackageReference Include="Digbyswift.Http" Version="1.5.0" />
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
       <PackageReference Include="SixLabors.ImageSharp.Web" Version="3.1.3" />
