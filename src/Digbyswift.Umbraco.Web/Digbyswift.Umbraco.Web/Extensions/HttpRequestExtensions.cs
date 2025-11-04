@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using Digbyswift.Core.Constants;
 using Microsoft.AspNetCore.Http;
 
@@ -6,20 +7,20 @@ namespace Digbyswift.Umbraco.Web.Extensions;
 
 public static class HttpRequestExtensions
 {
-    private static readonly Lazy<Regex> PreviewPathRegex = new(() => new Regex(@"^\/(?<id>[\d]{4,})(\/?)$"));
+    private static Regex PreviewPathRegex { get; } = new(pattern: @"^\/(?<id>[\d]{4,})(\/?)$", matchTimeout: TimeSpan.FromMilliseconds(150), options: RegexOptions.None);
 
     public static bool IsPreviewPath(this HttpRequest request)
     {
-        return PreviewPathRegex.Value.IsMatch(request.Path);
+        return PreviewPathRegex.IsMatch(request.Path);
     }
 
     public static int? GetPreviewId(this HttpRequest request)
     {
-        var match = PreviewPathRegex.Value.Match(request.Path);
+        var match = PreviewPathRegex.Match(request.Path);
         if (!match.Success)
             return null;
 
-        return Int32.Parse(match.Groups["id"].Value);
+        return Int32.Parse(match.Groups["id"].Value, CultureInfo.InvariantCulture);
     }
 
     public static bool TryGetPreviewId(this HttpRequest request, out int? previewId)

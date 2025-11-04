@@ -1,5 +1,6 @@
 ﻿using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Security;
+using Umbraco.Extensions;
 
 namespace Digbyswift.Umbraco.Web.Extensions;
 
@@ -24,7 +25,7 @@ public static class MemberExtensions
     {
         var identity = MemberIdentityUser.CreateNew(member.Username, member.Email, memberTypeAlias, isApproved, member.Name);
 
-        identity.Id = member.Id.ToString();
+        identity.Id = member.Id.ToInvariantString();
         identity.Key = member.Key;
 
         return identity;

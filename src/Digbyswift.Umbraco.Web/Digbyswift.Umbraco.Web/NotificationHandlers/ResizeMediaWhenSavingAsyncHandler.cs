@@ -1,4 +1,6 @@
-﻿using Digbyswift.Core.Extensions;
+﻿#pragma warning disable CS0618 // Type or member is obsolete
+
+using Digbyswift.Core.Extensions;
 using Digbyswift.Umbraco.Web.ImageSharp;
 using Digbyswift.Umbraco.Web.Providers;
 using Microsoft.Extensions.Configuration;

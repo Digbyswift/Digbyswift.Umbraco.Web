@@ -12,38 +12,30 @@ public static class PublishedContentExtensions
 
     public static bool Is(this IPublishedContent content, string alias)
     {
-        if (content == null)
-            throw new ArgumentNullException(nameof(content));
-
-        if (alias == null)
-            throw new ArgumentNullException(nameof(alias));
+        ArgumentNullException.ThrowIfNull(content);
+        ArgumentNullException.ThrowIfNull(alias);
 
         return content.ContentType.Alias.Equals(alias);
     }
 
     public static bool IsAny(this IPublishedContent content, params string[] alias)
     {
-        if (content == null)
-            throw new ArgumentNullException(nameof(content));
-
-        if (alias == null)
-            throw new ArgumentNullException(nameof(alias));
+        ArgumentNullException.ThrowIfNull(content);
+        ArgumentNullException.ThrowIfNull(alias);
 
         return alias.Any(content.Is);
     }
 
     public static bool HasTemplate(this IPublishedContent content)
     {
-        if (content == null)
-            throw new ArgumentNullException(nameof(content));
+        ArgumentNullException.ThrowIfNull(content);
 
         return content.TemplateId > 0;
     }
 
     public static bool HasAncestor(this IPublishedContent content, string docTypeAlias)
     {
-        if (content == null)
-            throw new ArgumentNullException(nameof(content));
+        ArgumentNullException.ThrowIfNull(content);
 
         return content.Ancestor(docTypeAlias) != null;
     }
