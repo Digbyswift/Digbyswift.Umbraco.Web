@@ -101,5 +101,44 @@ public static class UmbracoBuilderExtensions
 
         return builder;
     }
+
+    /// <summary>
+    /// <para>Removes Examine index registrations. These are set in
+    /// <see cref="global::Umbraco.Cms.Infrastructure.Examine.DependencyInjection.UmbracoBuilderExtensions.AddExamineIndexes">
+    /// Umbraco.Cms.Infrastructure.Examine.DependencyInjection.UmbracoBuilderExtensions.AddExamineIndexes()</see>.</para>
+    ///
+    /// <para>If removing an index, ensure that you also remove access to it in the CMS. For example, disabling
+    /// the member index will cause an error when using the CMS global search unless the Member section is removed
+    /// from the user's access.</para>
+    /// </summary>
+    public static IUmbracoBuilder DisableExamineIndexes(this IUmbracoBuilder builder, string[] indexNamesToDisable)
+    {
+        if (indexNamesToDisable.Length == 0)
+            return builder;
+
+        // Remove all Examine indexes
+        builder.Services.RemoveAll<IIndex>();
+
+        // Remove all Examine index configuration options
+        builder.Services.RemoveAll<IConfigureOptions<LuceneDirectoryIndexOptions>>();
+
+        AddIndexIfNotDisabled<UmbracoContentIndex>(UmbConstants.UmbracoIndexes.InternalIndexName);
+        AddIndexIfNotDisabled<UmbracoContentIndex>(UmbConstants.UmbracoIndexes.ExternalIndexName);
+        AddIndexIfNotDisabled<UmbracoMemberIndex>(UmbConstants.UmbracoIndexes.MembersIndexName);
+        AddIndexIfNotDisabled<DeliveryApiContentIndex>(UmbConstants.UmbracoIndexes.DeliveryApiContentIndexName);
+
+        // Reconfigure Examine index options
+        builder.Services.ConfigureOptions<ConfigureIndexOptions>();
+
+        return builder;
+
+        void AddIndexIfNotDisabled<TIndex>(string indexName)
+            where TIndex : LuceneIndex
+        {
+            if (!indexNamesToDisable.Contains(indexName))
+            {
+                builder.Services.AddExamineLuceneIndex<TIndex, ConfigurationEnabledDirectoryFactory>(indexName);
+            }
+        }
     }
 }
