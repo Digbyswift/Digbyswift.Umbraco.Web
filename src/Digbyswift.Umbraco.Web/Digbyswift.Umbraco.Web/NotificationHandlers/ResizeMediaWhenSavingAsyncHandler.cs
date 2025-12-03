@@ -42,7 +42,7 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
         _maxWidth = configuration.GetValue<int?>("Umbraco:CMS:Imaging:Resize:MaxWidth") ?? ImageSharpConstants.DefaultMaxWidth;
         _maxHeight = configuration.GetValue<int?>("Umbraco:CMS:Imaging:Resize:MaxHeight") ?? ImageSharpConstants.DefaultMaxHeight;
 
-        _logger.LogInformation("Resizing handler registered with values: {maxWidth} x {maxHeight} #media", _maxWidth, _maxHeight);
+        _logger.LogInformation("Resizing handler registered with values: {MaxWidth} x {MaxHeight} #media", _maxWidth, _maxHeight);
     }
 
     public async Task HandleAsync(MediaSavingNotification notification, CancellationToken cancellationToken)
@@ -85,7 +85,7 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
                     media.SetValue(uConstants.Conventions.Media.Height, image.Height);
                     media.SetValue(uConstants.Conventions.Media.Bytes, tempStream.Length);
 
-                    _logger.LogInformation("Media {relativeImagePath} ({originalWidth} x {originalHeight}) resized on upload #media", relativeImagePath, originalWidth, originalHeight);
+                    _logger.LogInformation("Media {RelativeImagePath} ({OriginalWidth} x {OriginalHeight}) resized on upload #media", relativeImagePath, originalWidth, originalHeight);
                 }
             }
         }

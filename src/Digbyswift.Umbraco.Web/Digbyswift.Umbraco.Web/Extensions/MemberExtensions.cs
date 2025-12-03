@@ -8,17 +8,10 @@ public static class MemberExtensions
 {
     public static Dictionary<string, object?> GetDirtyProperties(this IMember member)
     {
-        var dirtyEntries = new Dictionary<string, object?>();
-
-        foreach (var property in member.Properties)
-        {
-            if (member.IsPropertyDirty(property.Alias))
-            {
-                dirtyEntries.Add(property.Alias, property.GetValue());
-            }
-        }
-
-        return dirtyEntries;
+        return member
+            .Properties
+            .Where(property => member.IsPropertyDirty(property.Alias))
+            .ToDictionary(property => property.Alias, property => property.GetValue());
     }
 
     public static MemberIdentityUser ToIdentityUser(this IMember member, string memberTypeAlias, bool isApproved = true)

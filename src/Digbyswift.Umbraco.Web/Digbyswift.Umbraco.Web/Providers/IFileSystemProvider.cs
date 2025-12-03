@@ -1,4 +1,6 @@
-﻿namespace Digbyswift.Umbraco.Web.Providers;
+﻿#pragma warning disable S1133
+
+namespace Digbyswift.Umbraco.Web.Providers;
 
 [Obsolete("This class is no longer used and will be removed in future versions. Instead use Umbraco.StorageProviders.AzureBlob.IO.IAzureBlobFileSystem")]
 public interface IFileSystemProvider
