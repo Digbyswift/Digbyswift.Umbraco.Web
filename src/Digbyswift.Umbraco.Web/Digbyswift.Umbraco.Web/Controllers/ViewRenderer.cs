@@ -35,12 +35,6 @@ public class ViewRenderer : IViewRenderer
         return writer.ToString();
     }
 
-    public async Task<HtmlString> RenderAsHtmlStringAsync<TModel>(Controller controller, string name, TModel model)
-    {
-        var output = await RenderAsStringAsync(controller, name, model);
-        return new HtmlString(output);
-    }
-
     public async Task<string> RenderAsStringAsync<TModel>(ViewComponent component, string name, TModel model)
     {
         var viewEngineResult = _viewEngine.FindView(component.ViewContext, name, false);
@@ -62,6 +56,12 @@ public class ViewRenderer : IViewRenderer
         await view.RenderAsync(viewContext);
 
         return writer.ToString();
+    }
+
+    public async Task<HtmlString> RenderAsHtmlStringAsync<TModel>(Controller controller, string name, TModel model)
+    {
+        var output = await RenderAsStringAsync(controller, name, model);
+        return new HtmlString(output);
     }
 
     public async Task<HtmlString> RenderAsHtmlStringAsync<TModel>(ViewComponent component, string name, TModel model)

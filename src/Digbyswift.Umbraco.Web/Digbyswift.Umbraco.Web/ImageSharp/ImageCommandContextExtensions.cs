@@ -10,10 +10,9 @@ public static class ImageCommandContextExtensions
     public static ImageCommandContext EnsurePermittedCommands(this ImageCommandContext context)
     {
         var commands = context.Commands.Keys.ToList();
-        foreach (var key in commands)
+        foreach (var key in commands.Where(key => !ImageSharpCommandConstants.IsPermittedKey(key)))
         {
-            if (!ImageSharpCommandConstants.IsPermittedKey(key))
-                context.Commands.Remove(key);
+            context.Commands.Remove(key);
         }
 
         return context;

@@ -1,3 +1,5 @@
+#pragma warning disable S6672
+
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
