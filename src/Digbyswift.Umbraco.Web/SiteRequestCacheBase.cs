@@ -33,9 +33,7 @@ public abstract class SiteRequestCacheBase
     }
 
     public IPublishedContent? Get(int id) => ContentCache?.GetById(id);
-    public IPublishedContent? Get(Udi udi) => ContentCache?.GetById(udi);
     public IPublishedContent? Get(Guid key) => ContentCache?.GetById(key);
     public T? Get<T>(int id) where T : class, IPublishedContent => Get(id) as T;
-    public T? Get<T>(Udi udi) where T : class, IPublishedContent => Get(udi) as T;
     public T? Get<T>(Guid key) where T : class, IPublishedContent => Get(key) as T;
 }

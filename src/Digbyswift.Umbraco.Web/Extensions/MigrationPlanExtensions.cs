@@ -8,13 +8,13 @@ namespace Digbyswift.Umbraco.Web.Extensions;
 
 public static class MigrationPlanExtensions
 {
-    public static ExecutedMigrationPlan Execute(this MigrationPlan plan,
+    public static async Task<ExecutedMigrationPlan> ExecuteAsync(this MigrationPlan plan,
         IMigrationPlanExecutor migrationPlanExecutor,
         ICoreScopeProvider scopeProvider,
         IKeyValueService keyValueService)
     {
         var upgrader = new Upgrader(plan);
 
-        return upgrader.Execute(migrationPlanExecutor, scopeProvider, keyValueService);
+        return await upgrader.ExecuteAsync(migrationPlanExecutor, scopeProvider, keyValueService);
     }
 }
