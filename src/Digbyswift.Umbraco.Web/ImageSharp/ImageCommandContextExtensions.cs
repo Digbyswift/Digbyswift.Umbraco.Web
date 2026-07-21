@@ -27,23 +27,22 @@ public static class ImageCommandContextExtensions
 
     internal static ImageCommandContext EnsureValidDimensions(this ImageCommandContext context, int maxWidth, int maxHeight)
     {
-        var widthIsValid = true;
-        var heightIsValid = true;
+        var hasWidth = context.Commands.TryGetValue(ResizeWebProcessor.Width, out var widthValue);
+        var hasHeight = context.Commands.TryGetValue(ResizeWebProcessor.Height, out var heightValue);
 
-        if (context.Commands.TryGetValue(ResizeWebProcessor.Width, out var widthValue) && (!UInt32.TryParse(widthValue, out var width) || width > maxWidth))
-        {
-            widthIsValid = false;
-            context.Commands.Remove(ResizeWebProcessor.Width);
-        }
+        if (!hasWidth && !hasHeight)
+            return context;
 
-        if (context.Commands.TryGetValue(ResizeWebProcessor.Height, out var heightValue) && (!UInt32.TryParse(heightValue, out var height) || height > maxHeight))
-        {
-            heightIsValid = false;
-            context.Commands.Remove(ResizeWebProcessor.Height);
-        }
+        var widthIsValid = !hasWidth || (UInt32.TryParse(widthValue, out var width) && width > 0 && width <= maxWidth);
+        var heightIsValid = !hasHeight || (UInt32.TryParse(heightValue, out var height) && height > 0 && height <= maxHeight);
 
+        // Do not allow one invalid dimension to produce an oversized image
+        // when its aspect ratio is preserved.
         if (!widthIsValid || !heightIsValid)
         {
+            context.Commands.Remove(ResizeWebProcessor.Width);
+            context.Commands.Remove(ResizeWebProcessor.Height);
+
             context.Context.RequestServices.GetService<ILogger<ResizeMediaWhenSavingAsyncHandler>>()?.LogWarning(
                 "Image processing dimensions invalid w: {Width}; h: {Height}; image path: {Path}; referrer: {Referrer}; client IP: {Ip} #media",
                 widthValue,
@@ -52,7 +51,15 @@ public static class ImageCommandContextExtensions
                 context.Context.Request.Headers[HeaderNames.Referer].ToString(),
                 context.Context.Request.GetClientIp()
             );
+
+            return context;
         }
+
+        if (!hasWidth)
+            context.Commands[ResizeWebProcessor.Width] = maxWidth.ToInvariantString();
+
+        if (!hasHeight)
+            context.Commands[ResizeWebProcessor.Height] = maxHeight.ToInvariantString();
 
         return context;
     }
@@ -79,7 +86,7 @@ public static class ImageCommandContextExtensions
     }
 
     /// <summary>
-    /// Ensures only Jpeg or WebP format values are allowed.
+    /// Ensures only supported format values are allowed.
     /// </summary>
     internal static ImageCommandContext EnsureValidFormat(this ImageCommandContext context)
     {
@@ -111,7 +118,7 @@ public static class ImageCommandContextExtensions
     }
 
     /// <summary>
-    /// Ensures only Jpeg or WebP format values are allowed.
+    /// Automatically converts eligible JPEG and PNG requests to WebP.
     /// </summary>
     internal static ImageCommandContext CheckForWebPAutoConversion(this ImageCommandContext context)
     {
