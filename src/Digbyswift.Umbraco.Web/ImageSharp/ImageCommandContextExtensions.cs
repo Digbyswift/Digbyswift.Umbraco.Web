@@ -1,7 +1,14 @@
-﻿using Digbyswift.Http.Extensions;
-using Microsoft.AspNetCore.Http;
+﻿using Digbyswift.Core.Extensions;
+using Digbyswift.Core.Extensions.Validation;
+using Digbyswift.Core.Http.Extensions;
+using Digbyswift.Umbraco.Web.NotificationHandlers;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp.Web.Middleware;
+using SixLabors.ImageSharp.Web.Processors;
+using ImgConstants = Digbyswift.Umbraco.Web.ImageSharp.ImageSharpConstants;
 
 namespace Digbyswift.Umbraco.Web.ImageSharp;
 
@@ -9,8 +16,8 @@ public static class ImageCommandContextExtensions
 {
     public static ImageCommandContext EnsurePermittedCommands(this ImageCommandContext context)
     {
-        var commands = context.Commands.Keys.ToList();
-        foreach (var key in commands.Where(key => !ImageSharpCommandConstants.IsPermittedKey(key)))
+        var tmpCommands = context.Commands.Keys.ToList();
+        foreach (var key in tmpCommands.Where(key => !ImgConstants.SupportedKeys.Contains(key)))
         {
             context.Commands.Remove(key);
         }
@@ -18,15 +25,86 @@ public static class ImageCommandContextExtensions
         return context;
     }
 
-    public static ImageCommandContext EnsureValidQualityCommand(this ImageCommandContext context, int minQuality = 1)
+    internal static ImageCommandContext EnsureValidDimensions(this ImageCommandContext context, int maxWidth, int maxHeight)
     {
-        if (context.Commands.Keys.Contains(ImageSharpCommandConstants.QualityKey))
+        var widthIsValid = true;
+        var heightIsValid = true;
+
+        if (context.Commands.TryGetValue(ResizeWebProcessor.Width, out var widthValue) && (!UInt32.TryParse(widthValue, out var width) || width > maxWidth))
         {
-            var qualityValue = context.Commands[ImageSharpCommandConstants.QualityKey];
-            if (!Int32.TryParse(qualityValue, out var quality) || quality < minQuality || quality >= 100)
-            {
-                context.Commands.Remove(ImageSharpCommandConstants.QualityKey);
-            }
+            widthIsValid = false;
+            context.Commands.Remove(ResizeWebProcessor.Width);
+        }
+
+        if (context.Commands.TryGetValue(ResizeWebProcessor.Height, out var heightValue) && (!UInt32.TryParse(heightValue, out var height) || height > maxHeight))
+        {
+            heightIsValid = false;
+            context.Commands.Remove(ResizeWebProcessor.Height);
+        }
+
+        if (!widthIsValid || !heightIsValid)
+        {
+            context.Context.RequestServices.GetService<ILogger<ResizeMediaWhenSavingAsyncHandler>>()?.LogWarning(
+                "Image processing dimensions invalid w: {Width}; h: {Height}; image path: {Path}; referrer: {Referrer}; client IP: {Ip} #media",
+                widthValue,
+                heightValue,
+                context.Context.Request.Path.ToString(),
+                context.Context.Request.Headers[HeaderNames.Referer].ToString(),
+                context.Context.Request.GetClientIp()
+            );
+        }
+
+        return context;
+    }
+
+    internal static ImageCommandContext EnsureValidQuality(this ImageCommandContext context, int minQuality = 1)
+    {
+        if (!context.Commands.TryGetValue(QualityWebProcessor.Quality, out var qualityValue))
+            return context;
+
+        if (UInt32.TryParse(qualityValue, out var quality) && quality >= minQuality && quality <= 100)
+            return context;
+
+        context.Commands.Remove(QualityWebProcessor.Quality);
+
+        context.Context.RequestServices.GetService<ILogger<ResizeMediaWhenSavingAsyncHandler>>()?.LogWarning(
+            "Image processing quality invalid q: {QualityValue}; image path: {Path}; referrer: {Referrer}; client IP: {Ip} #media",
+            qualityValue,
+            context.Context.Request.GetDisplayUrl(),
+            context.Context.Request.GetRawReferrer(),
+            context.Context.Request.GetClientIp()
+        );
+
+        return context;
+    }
+
+    /// <summary>
+    /// Ensures only Jpeg or WebP format values are allowed.
+    /// </summary>
+    internal static ImageCommandContext EnsureValidFormat(this ImageCommandContext context)
+    {
+        // If the format key exists and has either no value
+        // or an invalid value, then remove the command.
+        if (!context.Commands.Contains(FormatWebProcessor.Format))
+            return context;
+
+        if (!context.Commands.TryGetValue(FormatWebProcessor.Format, out var format) || String.IsNullOrWhiteSpace(format))
+        {
+            context.Commands.Remove(FormatWebProcessor.Format);
+            return context;
+        }
+
+        if (!ImgConstants.SupportedFormats.ContainsIgnoreCase(format))
+        {
+            context.Commands.Remove(FormatWebProcessor.Format);
+
+            context.Context.RequestServices.GetService<ILogger<ResizeMediaWhenSavingAsyncHandler>>()?.LogWarning(
+                "Image processing format invalid f: {Format}; image path: {Path}; referrer: {Referrer}; client IP: {Ip} #media",
+                format,
+                context.Context.Request.Path.ToString(),
+                context.Context.Request.Headers[HeaderNames.Referer].ToString(),
+                context.Context.Request.GetClientIp()
+            );
         }
 
         return context;
@@ -35,65 +113,25 @@ public static class ImageCommandContextExtensions
     /// <summary>
     /// Ensures only Jpeg or WebP format values are allowed.
     /// </summary>
-    public static ImageCommandContext EnsureValidFormatCommand(this ImageCommandContext context)
+    internal static ImageCommandContext CheckForWebPAutoConversion(this ImageCommandContext context)
     {
-        if (context.Commands.Keys.Contains(ImageSharpCommandConstants.FormatKey))
-        {
-            var formatValue = context.Commands[ImageSharpCommandConstants.FormatKey];
-            if (formatValue != ImageSharpConstants.Jpeg && formatValue != ImageSharpConstants.Webp)
-            {
-                context.Commands.Remove(ImageSharpCommandConstants.FormatKey);
-            }
-        }
+        // Should not convert files that are already
+        // marked to be formatted.
+        if (context.Commands.Contains(FormatWebProcessor.Format))
+            return context;
 
-        if (context.Context.Request.AcceptsWebP() && context.RequiresAutoConversionToWebP())
-        {
-            context.Commands.Add(ImageSharpCommandConstants.FormatKey, ImageSharpConstants.Webp);
-            context.Context.Response.Headers.Append(ImageSharpConstants.VaryKey, HeaderNames.Accept);
-        }
+        // Only JPEG and PNG are eligible for automatic conversion.
+        var request = context.Context.Request;
+        if (!request.IsPngOrJpeg())
+            return context;
+
+        // Legacy browsers that don't support WebP.
+        if (request.IsInternetExplorer11())
+            return context;
+
+        // Default to WebP.
+        context.Commands[FormatWebProcessor.Format] = ImgConstants.Webp;
 
         return context;
-    }
-
-    public static ImageCommandContext EnsureValidWidthCommand(this ImageCommandContext context, int maxWidth)
-    {
-        if (context.Commands.Keys.Contains(ImageSharpCommandConstants.WidthKey))
-        {
-            var widthValue = context.Commands[ImageSharpCommandConstants.WidthKey];
-            if (!Int32.TryParse(widthValue, out var width) || width > maxWidth)
-            {
-                context.Commands.Remove(ImageSharpCommandConstants.WidthKey);
-            }
-        }
-
-        return context;
-    }
-
-    public static ImageCommandContext EnsureValidHeightCommand(this ImageCommandContext context, int maxHeight)
-    {
-        if (context.Commands.Keys.Contains(ImageSharpCommandConstants.HeightKey))
-        {
-            var heightValue = context.Commands[ImageSharpCommandConstants.HeightKey];
-            if (!Int32.TryParse(heightValue, out var height) || height > maxHeight)
-            {
-                context.Commands.Remove(ImageSharpCommandConstants.HeightKey);
-            }
-        }
-
-        return context;
-    }
-
-    private static bool RequiresAutoConversionToWebP(this ImageCommandContext context)
-    {
-        if (!context.Context.Request.Path.HasValue)
-            return false;
-
-        if (context.Context.Request.Path.Value.EndsWith(ImageSharpConstants.GifExtension))
-            return false;
-
-        if (context.Commands.Contains(ImageSharpCommandConstants.FormatKey))
-            return false;
-
-        return true;
     }
 }

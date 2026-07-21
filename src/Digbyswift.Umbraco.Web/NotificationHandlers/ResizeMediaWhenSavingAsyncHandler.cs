@@ -1,11 +1,11 @@
 ﻿#pragma warning disable CS0618 // Type or member is obsolete
 
+using System.Text.Json;
 using Digbyswift.Core.Extensions;
 using Digbyswift.Umbraco.Web.ImageSharp;
 using Digbyswift.Umbraco.Web.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
@@ -28,6 +28,17 @@ namespace Digbyswift.Umbraco.Web.NotificationHandlers;
 /// </summary>
 public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandler<MediaSavingNotification>
 {
+    private static readonly string[] _supportedExtensions =
+    [
+        ".bmp",
+        ".gif",
+        ".jpeg",
+        ".jpg",
+        ".png",
+        ".tif",
+        ".tiff",
+    ];
+
     private readonly IFileSystemProvider _fileSystemProvider;
     private readonly ILogger _logger;
     private readonly int _maxWidth;
@@ -44,7 +55,10 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
         _maxWidth = configuration.GetValue<int?>("Umbraco:CMS:Imaging:Resize:MaxWidth") ?? ImageSharpConstants.DefaultMaxWidth;
         _maxHeight = configuration.GetValue<int?>("Umbraco:CMS:Imaging:Resize:MaxHeight") ?? ImageSharpConstants.DefaultMaxHeight;
 
-        _logger.LogInformation("Resizing handler registered with values: {MaxWidth} x {MaxHeight} #media", _maxWidth, _maxHeight);
+        if (_logger.IsEnabled(LogLevel.Information))
+        {
+            _logger.LogInformation("Resizing handler registered with values: {MaxWidth} x {MaxHeight} #media", _maxWidth, _maxHeight);
+        }
     }
 
     public async Task HandleAsync(MediaSavingNotification notification, CancellationToken cancellationToken)
@@ -87,7 +101,10 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
                     media.SetValue(uConstants.Conventions.Media.Height, image.Height);
                     media.SetValue(uConstants.Conventions.Media.Bytes, tempStream.Length);
 
-                    _logger.LogInformation("Media {RelativeImagePath} ({OriginalWidth} x {OriginalHeight}) resized on upload #media", relativeImagePath, originalWidth, originalHeight);
+                    if (_logger.IsEnabled(LogLevel.Information))
+                    {
+                        _logger.LogInformation("Media {RelativeImagePath} ({OriginalWidth} x {OriginalHeight}) resized on upload #media", relativeImagePath, originalWidth, originalHeight);
+                    }
                 }
             }
         }
@@ -111,7 +128,7 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
         string? workingImagePath;
         if (umbracoFileProp.DetectIsJson())
         {
-            var cropObject = JsonConvert.DeserializeObject<ImageCropperValue>(umbracoFileProp);
+            var cropObject = JsonSerializer.Deserialize<ImageCropperValue>(umbracoFileProp);
             if (cropObject == null)
                 return false;
 
@@ -126,7 +143,7 @@ public sealed class ResizeMediaWhenSavingAsyncHandler : INotificationAsyncHandle
             return false;
 
         var extension = Path.GetExtension(workingImagePath);
-        if (!ImageSharpConstants.GetSupportedExtensions.ContainsIgnoreCase(extension))
+        if (!_supportedExtensions.ContainsIgnoreCase(extension))
             return false;
 
         imagePath = workingImagePath;
