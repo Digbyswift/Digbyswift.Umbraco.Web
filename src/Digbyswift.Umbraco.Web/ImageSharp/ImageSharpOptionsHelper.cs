@@ -8,10 +8,10 @@ public static class ImageSharpOptionsHelper
     {
         context
             .EnsurePermittedCommands()
-            .EnsureValidWidthCommand(maxWidth)
-            .EnsureValidHeightCommand(maxHeight)
-            .EnsureValidQualityCommand(minQuality)
-            .EnsureValidFormatCommand();
+            .EnsureValidDimensions(maxWidth, maxHeight)
+            .EnsureValidQuality(minQuality)
+            .EnsureValidFormat()
+            .CheckForWebPAutoConversion();
 
         return Task.CompletedTask;
     }

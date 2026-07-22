@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Umbraco.Cms.Core.Dashboards;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Extensions;
 
@@ -28,9 +27,9 @@ public static class WebApplicationBuilderExtensions
     /// <item>AddControllerDependencies()</item>
     /// </list>
     /// </summary>
-    public static IUmbracoBuilder AddCustomUmbracoForAzure(this WebApplicationBuilder services, Action<IUmbracoBuilder>? configure = null)
+    public static IUmbracoBuilder AddCustomUmbracoForAzure(this WebApplicationBuilder appBuilder, Action<IUmbracoBuilder>? configure = null)
     {
-        var builder = services
+        var builder = appBuilder
             .CreateUmbracoBuilder()
             .AddBackOffice()
             .AddWebsite()
@@ -45,9 +44,6 @@ public static class WebApplicationBuilderExtensions
             .AddEnvironmentSettings()
             .AddEmailSettings()
             .AddAzureCdnSettings();
-
-        builder.Dashboards()
-            .Remove<ContentDashboard>();
 
         builder.Services
             .AddControllerDependencies();

@@ -71,19 +71,6 @@ public static class UmbracoBuilderExtensions
         return builder;
     }
 
-    public static IUmbracoBuilder IgnoreLocalDb(this IUmbracoBuilder builder)
-    {
-        if (builder.Config.GetValue("Umbraco:CMS:NuCache:IgnoreLocalDb", false))
-        {
-            builder.Services.AddSingleton(new PublishedSnapshotServiceOptions
-            {
-                IgnoreLocalDb = true
-            });
-        }
-
-        return builder;
-    }
-
     public static IUmbracoBuilder RemoveNotificationHandler<TNotification, TNotificationHandler>(
         this IUmbracoBuilder builder)
         where TNotificationHandler : INotificationHandler<TNotification>

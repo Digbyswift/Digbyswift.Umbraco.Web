@@ -1,0 +1,49 @@
+<Project>
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)</SolutionDir>
+        <CodeAnalysisRuleSet>$(SolutionDir)\StyleCopAnalyzers.Custom.ruleset</CodeAnalysisRuleSet>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="SonarAnalyzer.CSharp">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="StyleCop.Analyzers">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <!--
+          Vulnerable package dependencies
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          These are present only because this project is already using a package or
+          dependency which mitigates this vulnerability. E.g. Digbyswift.Umbraco.Web
+          targets Umbraco.Cms 17.0.0 which has vulnerabilities. However, this project
+          uses a much more recent version of Umbraco.Cms, so it is safe to supress
+          the advisory.
+
+          * DO NOT include advisories here to allow the build process to complete.
+          * ALWAYS add the advisory title.
+        -->
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-fpvf-fvp5-996r" title="Umbraco Backoffice API Allows Unauthorized Modification of Domain Data" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-rhcg-3h8r-v6vp" title="Umbraco Affected by Vertical Privilege Escalation via Missing Authorization Checks" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-vr9v-27gg-qgx4" title="Umbraco.Cms: XSS/HTML Injection in Umbraco Backoffice confirmation dialog" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-vrqc-59mw-qqg7" title="Umbraco has Stored XSS in UFM Rendering Pipeline via Permissive DOMPurify Attribute Filtering" />
+
+        <!--
+          Unavoidable vulnerability supressions
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          These are present only because there is no upgrade path available.
+
+          * DO NOT include advisories here to allow the build process to complete.
+          * ALWAYS add the advisory title.
+        -->
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2m69-gcr7-jv3q" title="SQLitePCLRaw.lib.e_sqlite3 has a vulnerable dependency on SQLite" />
+    </ItemGroup>
+</Project>

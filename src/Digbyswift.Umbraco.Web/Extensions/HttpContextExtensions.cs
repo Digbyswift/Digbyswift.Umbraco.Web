@@ -24,6 +24,6 @@ public static class HttpContextExtensions
         const string key = "UMB_UCONTEXT";
 
         return context.Request.Cookies.ContainsKey(key) ||
-               context.Request.Cookies.ContainsKey(global::Umbraco.Cms.Core.Constants.Web.InstallerCookieName);
+               context.Request.Cookies.ContainsKey(global::Umbraco.Cms.Core.Constants.Web.Mvc.InstallArea);
     }
 }
