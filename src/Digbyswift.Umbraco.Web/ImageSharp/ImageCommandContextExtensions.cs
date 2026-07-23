@@ -51,15 +51,7 @@ public static class ImageCommandContextExtensions
                 context.Context.Request.Headers[HeaderNames.Referer].ToString(),
                 context.Context.Request.GetClientIp()
             );
-
-            return context;
         }
-
-        if (!hasWidth)
-            context.Commands[ResizeWebProcessor.Width] = maxWidth.ToInvariantString();
-
-        if (!hasHeight)
-            context.Commands[ResizeWebProcessor.Height] = maxHeight.ToInvariantString();
 
         return context;
     }

@@ -1,26 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <!-- Project settings -->
         <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <RootNamespace>Digbyswift.Umbraco.Web</RootNamespace>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <StaticWebAssetBasePath>/</StaticWebAssetBasePath>
+    </PropertyGroup>
 
-        <!-- Nuget settings -->
-        <Title>Digbyswift.Umbraco.Web</Title>
-        <Authors>Digbyswift Ltd</Authors>
-        <NeutralLanguage>en-GB</NeutralLanguage>
-        <Copyright>Copyright © Digbyswift Ltd 2026</Copyright>
-        <PackageId>Digbyswift.Umbraco.Web</PackageId>
-        <PackageProjectUrl>https://github.com/digbyswift/Digbyswift.Umbraco.Web</PackageProjectUrl>
+    <PropertyGroup>
+        <Title>$(RootNamespace)</Title>
+        <Company>Digbyswift Ltd</Company>
+        <Authors>$(Company)</Authors>
+        <Copyright>Copyright © $([System.DateTime]::Now.Year) $(Company)</Copyright>
+        <PackageProjectUrl>https://github.com/digbyswift/$(RootNamespace)</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/digbyswift/$(RootNamespace)</RepositoryUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageReleaseNotes>A nullable-enabled library of useful classes and extensions for supporting an Umbraco v17+ project.</PackageReleaseNotes>
+        <PackageTags>c# umbraco</PackageTags>
+        <PackageVersion>17.1.1</PackageVersion>
+        <AssemblyVersion>17.1.1</AssemblyVersion>
+        <FileVersion>17.1.1</FileVersion>
         <PackageIcon>package-icon.png</PackageIcon>
-        <PackageTags>c# aspnet umbraco</PackageTags>
-        <PackageVersion>17.1.0</PackageVersion>
-        <AssemblyVersion>17.1.0</AssemblyVersion>
-        <FileVersion>17.1.0</FileVersion>
-        <RepositoryUrl>https://github.com/digbyswift/Digbyswift.Umbraco.Web</RepositoryUrl>
+        <PackageIconUrl>package-icon.png</PackageIconUrl>
+        <Description>A nullable-enabled library of useful classes and extensions for supporting an Umbraco v17+ project.</Description>
         <RepositoryType>git</RepositoryType>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Digbyswift.AspNet"/>
