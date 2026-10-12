@@ -1,0 +1,78 @@
+name: Run package tests
+
+on:
+  push:
+    branches:
+      - 'version/17'
+  pull_request:
+    branches:
+      - 'version/17'
+
+jobs:
+  test-lib:
+    name: Run unit tests
+    strategy:
+        matrix:
+            os: ['windows-latest', 'ubuntu-22.04']
+
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        working-directory: src/Digbyswift.Umbraco.Web.Tests
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore --force-evaluate
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal --logger trx
+
+      - name: Upload test result files
+        if: (!cancelled())
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test results (OS ${{ matrix.os }})
+          path: ${{ github.workspace }}/**/*.trx
+          retention-days: 5
+
+  publish-test-results:
+    name: Publish tests results
+    needs: test-lib
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+    if: (!cancelled())
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: "artifacts/**/*.trx"
+
+      # Pinned commit for https://github.com/EnricoMi/publish-unit-test-result-action/releases/tag/v2.20.0
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@afb2984f4d89672b2f9d9c13ae23d53779671984
+        if: always()
+        with:
+          files: |
+            **/*.trx

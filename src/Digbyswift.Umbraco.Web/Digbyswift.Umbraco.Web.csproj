@@ -21,9 +21,9 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageReleaseNotes>A nullable-enabled library of useful classes and extensions for supporting an Umbraco v17+ project.</PackageReleaseNotes>
         <PackageTags>c# umbraco</PackageTags>
-        <PackageVersion>17.1.1</PackageVersion>
-        <AssemblyVersion>17.1.1</AssemblyVersion>
-        <FileVersion>17.1.1</FileVersion>
+        <PackageVersion>17.2.0</PackageVersion>
+        <AssemblyVersion>17.2.0</AssemblyVersion>
+        <FileVersion>17.2.0</FileVersion>
         <PackageIcon>package-icon.png</PackageIcon>
         <PackageIconUrl>package-icon.png</PackageIconUrl>
         <Description>A nullable-enabled library of useful classes and extensions for supporting an Umbraco v17+ project.</Description>
@@ -34,12 +34,7 @@
     <ItemGroup>
         <PackageReference Include="Digbyswift.AspNet"/>
         <PackageReference Include="Digbyswift.Core"/>
-        <PackageReference Include="MessagePack"/>
-        <PackageReference Include="Microsoft.OpenApi"/>
-        <PackageReference Include="MailKit"/>
-        <PackageReference Include="MimeKit"/>
         <PackageReference Include="SixLabors.ImageSharp.Web"/>
-        <PackageReference Include="System.Security.Cryptography.Xml"/>
         <PackageReference Include="Umbraco.Cms.Api.Management" />
         <PackageReference Include="Umbraco.Cms.Web.Common"/>
         <PackageReference Include="Umbraco.Cms.Web.Website"/>

@@ -2,10 +2,12 @@ name: Build and publish packages
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - 'version/17'
 
 jobs:
   build-lib:
+    name: Build package
     runs-on: 'windows-latest'
 
     defaults:
@@ -20,9 +22,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            7.0.x
-            8.0.x
+          dotnet-version: 10.0.x
 
       - name: Restore dependencies
         run: dotnet restore
@@ -33,7 +33,7 @@ jobs:
       - name: Pack
         run: dotnet pack --include-symbols -p:SymbolPackageFormat=snupkg --no-build --output _package -p:SymbolPackageFormat=snupkg
 
-      - name: Upload package
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: .package
@@ -41,17 +41,25 @@ jobs:
           retention-days: 5
 
   upload-lib:
+    name: Publish package
     runs-on: 'windows-latest'
 
     needs: build-lib
+
+    permissions:
+      id-token: write
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-            name: .package
+          name: .package
 
-      - name: Publish package to nuget
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: dotnet nuget push *.nupkg --api-key "${env:NUGET_API_KEY}" --source https://api.nuget.org/v3/index.json
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: digbyswift
+
+      - name: Push package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
