@@ -2,9 +2,11 @@ name: Run package tests
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - 'version/13'
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - 'version/13'
 
 jobs:
   test-lib:
