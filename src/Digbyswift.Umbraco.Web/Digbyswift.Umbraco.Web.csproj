@@ -6,21 +6,23 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
         <!-- Nuget settings -->
-        <Title>Digbyswift.Umbraco.Web</Title>
+        <Title>$(RootNamespace)</Title>
         <Authors>Digbyswift Ltd</Authors>
         <NeutralLanguage>en-GB</NeutralLanguage>
-        <Copyright>Copyright © Digbyswift Ltd 2025</Copyright>
-        <PackageId>Digbyswift.Umbraco.Web</PackageId>
-        <PackageProjectUrl>https://github.com/digbyswift/Digbyswift.Umbraco.Web</PackageProjectUrl>
+        <Copyright>Copyright © $(Authors) 2026</Copyright>
+        <PackageId>$(RootNamespace)</PackageId>
+        <PackageProjectUrl>https://github.com/digbyswift/$(RootNamespace)</PackageProjectUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>package-icon.png</PackageIcon>
         <PackageTags>c# aspnet umbraco</PackageTags>
-        <PackageVersion>13.4.1</PackageVersion>
-        <AssemblyVersion>13.4.1</AssemblyVersion>
-        <FileVersion>13.4.1</FileVersion>
-        <RepositoryUrl>https://github.com/digbyswift/Digbyswift.Umbraco.Web</RepositoryUrl>
+        <PackageVersion>13.5.0</PackageVersion>
+        <AssemblyVersion>13.5.0</AssemblyVersion>
+        <FileVersion>13.5.0</FileVersion>
+        <RepositoryUrl>https://github.com/digbyswift/$(RootNamespace)</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Digbyswift.AspNet"/>
