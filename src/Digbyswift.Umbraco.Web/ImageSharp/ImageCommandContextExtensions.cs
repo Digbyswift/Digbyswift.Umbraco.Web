@@ -1,4 +1,4 @@
-﻿using Digbyswift.Http.Extensions;
+﻿using Digbyswift.Core.Http.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp.Web.Middleware;
